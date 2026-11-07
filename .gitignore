@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches/
+!.yarn/plugins/
+!.yarn/releases/
+!.yarn/versions/
+
+# Build output and tool caches
+/dist/
+/build/
+/out/
+.cache/
+.vite/
+.parcel-cache/
+.turbo/
+.eslintcache
+.stylelintcache
+.prettiercache
+*.tsbuildinfo
+
+# Test output and generated reports (keep fixtures and visual baselines)
+/coverage/
+/test-results/
+/playwright-report/
+/blob-report/
+/reports/
+/.lighthouseci/
+
+# Local environment values (keep documentation templates)
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.sample
+!.env.*.sample
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local scratch data and user photos
+/tmp/
+/temp/
+/local-data/
+/uploads/
+/captures/
+/exports/
+
+# Local credentials
+/.aws/
+/.ssh/
+
+# Editor and operating system files
+/.idea/
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/settings.json
+!/.vscode/tasks.json
+!/.vscode/launch.json
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Keep package-manager lockfiles, project assets and source fixtures tracked.
