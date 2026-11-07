@@ -1,0 +1,11 @@
+{
+  "name": "photobooth",
+  "private": true,
+  "scripts": {
+    "check": "node script/check-all.mjs",
+    "check:code": "node script/check-code.mjs",
+    "check:assets": "node script/check-unused-assets.mjs",
+    "check:performance": "node script/check-performance.mjs",
+    "test:checkers": "node --test script/tests/checkers.test.mjs"
+  }
+}
