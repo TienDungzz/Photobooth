@@ -1,3 +1,5 @@
 /setup /index.html 200
 /setup/ /index.html 200
 /setup/preview /index.html 200
+/gallery /index.html 200
+/gallery/ /index.html 200

@@ -6,6 +6,7 @@ import './shared/styles/tokens.css';
 import './shared/styles/global.css';
 import './features/editor/Editor.css';
 import './features/editor/EditorMobile.css';
+import './features/saved-gallery/SavedGallery.css';
 import './features/camera/CameraDialog.css';
 import './features/export-photo/Finish.css';
 

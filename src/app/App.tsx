@@ -4,7 +4,9 @@ import { SettingsDialog } from './components/SettingsDialog';
 import { ConfirmDialog } from '../shared/components/ConfirmDialog';
 import { mergePhotos } from '../features/photo-library/merge-photos';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { Flower2, Globe2, Settings2, ShieldCheck, X } from 'lucide-react';
+import { Flower2, Images, Settings2, ShieldCheck, X } from 'lucide-react';
+import { restoreProject, saveProject, type SavedProject } from '../features/saved-gallery/storage';
+import { useGalleryCount } from '../features/saved-gallery/useGalleryCount';
 import { useTranslation } from 'react-i18next';
 import { frames, layouts, composeDesign } from '../features/frame-catalog';
 import { Editor } from '../features/editor';
@@ -24,6 +26,11 @@ const CameraDialog = lazy(() =>
 const Finish = lazy(() =>
   import('../features/export-photo').then((module) => ({ default: module.Finish })),
 );
+const SavedGallery = lazy(() =>
+  import('../features/saved-gallery/SavedGallery').then((module) => ({
+    default: module.SavedGallery,
+  })),
+);
 
 export function App() {
   const { t, i18n } = useTranslation();
@@ -42,7 +49,9 @@ export function App() {
   const locked = useRef(false);
   const alive = useRef(true);
   const [messages, setMessages] = useState<string[]>([]);
+  const [restorePending, setRestorePending] = useState<SavedProject | null>(null);
   const main = useRef<HTMLElement>(null);
+  const galleryCount = useGalleryCount();
   useEffect(() => {
     if (page !== 'editor') setCamera(null);
     if (page !== 'finish') setConfirmNewSession(false);
@@ -171,6 +180,32 @@ export function App() {
     void i18n.changeLanguage(locale);
     setPreferences((old) => ({ ...old, locale }));
   };
+  const openSaved = async (project: SavedProject) => {
+    if (locked.current) return;
+    setRestorePending(null);
+    locked.current = true;
+    setBusy(true);
+    try {
+      const restored = await restoreProject(project);
+      if (!alive.current) {
+        restored.photos.forEach(releasePhoto);
+        return;
+      }
+      photoRef.current.forEach(releasePhoto);
+      photoRef.current = restored.photos;
+      setPhotos(restored.photos);
+      setFrame(restored.frame);
+      setComposition(restored.composition);
+      setMessages([]);
+      setRoute('editor');
+      window.scrollTo({ top: 0 });
+    } catch {
+      if (alive.current) setMessages(['error.restoreSaved']);
+    } finally {
+      locked.current = false;
+      if (alive.current) setBusy(false);
+    }
+  };
   return (
     <div className={'app' + (page !== 'home' ? ' app--setup' : '')}>
       <a className="skip-link" href="#main">
@@ -195,7 +230,7 @@ export function App() {
             {t('homeNav')}
           </button>
           <button
-            className={`header__link${page !== 'home' ? ' header__link--active' : ''}`}
+            className={`header__link${page === 'editor' || page === 'finish' ? ' header__link--active' : ''}`}
             disabled={!frame}
             onClick={() => navigate('editor')}
           >
@@ -204,12 +239,19 @@ export function App() {
         </nav>
         <div className="header__actions">
           <button
-            className="header__language"
-            onClick={() => setLocale(i18n.language === 'vi' ? 'en' : 'vi')}
-            aria-label={t('language')}
+            className="header__gallery"
+            aria-label={t('savedGallery')}
+            aria-describedby={galleryCount !== null ? 'saved-gallery-count' : undefined}
+            aria-current={page === 'gallery' ? 'page' : undefined}
+            onClick={() => navigate('gallery')}
           >
-            <Globe2 size={16} />
-            <span>{i18n.language === 'vi' ? 'VI' : 'EN'}</span>
+            <Images size={20} />
+            <span>{t('savedGallery')}</span>
+            {galleryCount !== null && (
+              <small id="saved-gallery-count" className="header__gallery-count" aria-live="polite">
+                {galleryCount > 99 ? '99+' : galleryCount}
+              </small>
+            )}
           </button>
           <button
             className="icon-button"
@@ -270,6 +312,16 @@ export function App() {
               composition={composition}
               onBack={() => navigate('editor')}
               onNew={() => setConfirmNewSession(true)}
+              onArchive={(file) => saveProject(frame, photos, composition, file)}
+            />
+          )}
+          {page === 'gallery' && (
+            <SavedGallery
+              busy={busy}
+              onRestore={(project) => {
+                if (photoRef.current.length) setRestorePending(project);
+                else void openSaved(project);
+              }}
             />
           )}
           {camera && page === 'editor' && (
@@ -310,6 +362,16 @@ export function App() {
           confirmLabel={t('startNewSession')}
           onConfirm={newSession}
           onCancel={() => setConfirmNewSession(false)}
+          returnFocus={main}
+        />
+      )}
+      {restorePending && (
+        <ConfirmDialog
+          title={t('editAgain')}
+          description={t('restoreSavedConfirm')}
+          confirmLabel={t('editAgain')}
+          onConfirm={() => void openSaved(restorePending)}
+          onCancel={() => setRestorePending(null)}
           returnFocus={main}
         />
       )}

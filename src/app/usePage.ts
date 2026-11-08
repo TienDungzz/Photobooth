@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
 
-export type Page = 'home' | 'editor' | 'finish';
-const paths: Record<Page, string> = { home: '/', editor: '/setup', finish: '/setup/preview' };
+export type Page = 'home' | 'editor' | 'finish' | 'gallery';
+const paths: Record<Page, string> = {
+  home: '/',
+  editor: '/setup',
+  finish: '/setup/preview',
+  gallery: '/gallery',
+};
 const readPage = (): Page =>
-  location.pathname.replace(/\/$/, '') === '/setup/preview'
-    ? 'finish'
-    : location.pathname.replace(/\/$/, '') === '/setup'
-      ? 'editor'
-      : 'home';
+  location.pathname.replace(/\/$/, '') === '/gallery'
+    ? 'gallery'
+    : location.pathname.replace(/\/$/, '') === '/setup/preview'
+      ? 'finish'
+      : location.pathname.replace(/\/$/, '') === '/setup'
+        ? 'editor'
+        : 'home';
 export function usePage() {
   const [page, setPage] = useState<Page>(readPage);
   useEffect(() => {
