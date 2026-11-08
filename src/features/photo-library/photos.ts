@@ -89,6 +89,7 @@ export async function importPhoto(blob: Blob, checkFile = true): Promise<Photo> 
       throw new InvalidPhoto('decode');
     }
     return {
+      blob: normalized,
       id: crypto.randomUUID(),
       fingerprint,
       url,

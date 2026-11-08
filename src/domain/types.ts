@@ -129,6 +129,7 @@ export type Frame = {
 // A renderable design combines two independent selections. This is not a catalog frame.
 export type Design = Frame & { layout: Layout };
 export type Photo = {
+  blob?: Blob;
   id: string;
   fingerprint?: string;
   url: string;
