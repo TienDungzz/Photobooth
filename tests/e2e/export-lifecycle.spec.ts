@@ -48,9 +48,9 @@ test('iPhone shares a prepared image without keeping processing state or opening
   expect(await page.evaluate(() => (window as any).sharedType)).toBe('image/jpeg');
   expect(await page.evaluate(() => (window as any).activeAtShare)).toBe(true);
   await expect(page.getByRole('button', { name: /Đang tạo và tối ưu/ })).toHaveCount(0);
-  await expect(page.getByRole('status')).toHaveCount(0);
+  await expect(page.locator('.notice--error')).toHaveCount(0);
   await page.evaluate(() => (window as any).cancelShare());
-  await expect(page.getByRole('status')).toHaveCount(0);
+  await expect(page.locator('.notice--error')).toHaveCount(0);
   await download.click();
   await page.evaluate(() => (window as any).resolveShare());
   await expect(download).toBeEnabled();
@@ -66,7 +66,7 @@ test('download fallback starts a file download and clears its notice', async ({ 
   const event = page.waitForEvent('download');
   await button.click();
   expect((await event).suggestedFilename()).toMatch(/\.jpg$/);
-  await expect(page.getByRole('status')).toContainText('bắt đầu tải');
+  await expect(page.getByText('Đã tạo ảnh và bắt đầu tải xuống.', { exact: true })).toBeVisible();
   await expect(page.getByRole('status')).toHaveCount(0, { timeout: 6000 });
   await expect(button).toBeEnabled();
 });
