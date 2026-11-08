@@ -36,9 +36,9 @@ test('mobile tools are discoverable and navigate to each editor section', async 
   const buffer = await sharp({ create: { width: 600, height: 800, channels: 3, background: '#aabbcc' } }).png().toBuffer();
   await page.getByLabel('Tải ảnh từ thiết bị', { exact: true }).setInputFiles({ name: 'mobile.png', mimeType: 'image/png', buffer });
   await expect(page.locator('.photo-tray__items img')).toHaveCount(1);
-  const trayTop = await page.locator('.photo-tray').evaluate(element => element.getBoundingClientRect().top);
+  const trayTop = await page.locator('.photo-tray__pick').evaluate(element => element.getBoundingClientRect().top);
   await page.evaluate(() => window.scrollBy(0, 80));
-  expect(await page.locator('.photo-tray').evaluate(element => element.getBoundingClientRect().top)).toBeCloseTo(trayTop, 0);
+  expect(await page.locator('.photo-tray__pick').evaluate(element => element.getBoundingClientRect().top)).toBeCloseTo(trayTop, 0);
   await page.screenshot({ path: 'test-results/mobile-photo-dock.png' });
   await nav.getByRole('button', { name: /Ảnh/ }).click();
   await page.locator('.studio__slot').first().click();

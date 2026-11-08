@@ -1,10 +1,11 @@
+import { chooseDesign, showStudioTool } from './helpers/studio-tools';
 import { test, expect } from '@playwright/test';
 
 test('desktop preview uses the available viewport after scrolling past the header', async ({ page }, info) => {
   test.skip(info.project.name !== 'desktop', 'Desktop viewport sizing');
   await page.setViewportSize({ width: 1920, height: 1080 });
   await page.goto('/setup');
-  await page.getByRole('button', { name: 'Chọn bố cục: Classic photostrip · 4 ảnh', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Classic photostrip · 4 ảnh');
   const workspace = page.locator('.studio__workspace');
   await page.evaluate(() => window.scrollTo(0, document.querySelector('.studio__layout')!.getBoundingClientRect().top + window.scrollY));
   await expect.poll(() => workspace.evaluate(e => Math.round(e.getBoundingClientRect().top))).toBe(24);
@@ -22,7 +23,7 @@ test('desktop preview uses the available viewport after scrolling past the heade
   expect(strip.canvasWidth).toBeCloseTo(strip.width, 0);
   expect(strip.canvasHeight).toBeCloseTo(strip.height, 0);
   await page.screenshot({path:'test-results/large-preview-strip.png'});
-  await page.getByRole('button', { name: 'Chọn bố cục: Tấm bưu thiếp · 1 ảnh', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Tấm bưu thiếp · 1 ảnh');
   const landscape = await measure();
   expect(landscape.width).toBeGreaterThan(700);
   expect(landscape.width/landscape.height).toBeCloseTo(1.5,2);
@@ -35,7 +36,7 @@ test('editor selector rails stay inside the sidebar without overlapping controls
 }, testInfo) => {
   await page.goto('/setup');
   if (testInfo.project.name === 'mobile') await page.locator('.studio__mobile-nav button').nth(1).click();
-  await page.getByRole('button', { name: 'Chọn bố cục: Chân dung · 1 ảnh', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Chân dung · 1 ảnh');
 
   await page.screenshot({
     path: `test-results/editor-layout-${testInfo.project.name}.png`,
@@ -100,6 +101,7 @@ test('editor selector rails stay inside the sidebar without overlapping controls
     await expect.poll(() => page.locator('.studio__workspace').evaluate((element) => Math.round(element.getBoundingClientRect().top))).toBe(24);
     await expect.poll(() => page.locator('.studio__sidebar').evaluate((element) => Math.round(element.getBoundingClientRect().top))).toBe(24);
   }
+  await showStudioTool(page, 'photos');
   await page.getByRole('button', { name: 'Mở camera', exact: true }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
 });

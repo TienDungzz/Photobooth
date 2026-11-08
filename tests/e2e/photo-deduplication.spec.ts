@@ -1,9 +1,10 @@
+import { chooseDesign } from './helpers/studio-tools';
 import {expect,test} from '@playwright/test';
 import sharp from 'sharp';
 
 test('duplicate images share one tray entry while slots retain independent crops',async({page})=>{
   await page.goto('/setup');
-  await page.getByRole('button',{name:'Chọn bố cục: Bốn mùa bên nhau · 4 ảnh',exact:true}).click();
+  await chooseDesign(page, 'Chọn bố cục: Bốn mùa bên nhau · 4 ảnh');
   const buffer=await sharp({create:{width:800,height:1000,channels:3,background:'#deaa77'}}).png().toBuffer();
   const input=page.getByLabel('Tải ảnh từ thiết bị',{exact:true});
   await input.setInputFiles([{name:'same.png',mimeType:'image/png',buffer},{name:'renamed.png',mimeType:'image/png',buffer}]);

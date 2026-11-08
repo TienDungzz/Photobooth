@@ -1,3 +1,4 @@
+import { chooseDesign } from './helpers/studio-tools';
 import { expect,test } from '@playwright/test';
 import sharp from 'sharp';
 
@@ -8,9 +9,10 @@ test('clicking a photo opens one editing popup with crop preview and draft contr
     await page.getByRole('button',{name:'Tối',exact:true}).click();
     await page.getByRole('button',{name:'Đóng',exact:true}).click();
   }
-  await page.getByRole('button',{name:'Chọn bố cục: Chân dung · 1 ảnh',exact:true}).click();
+  await chooseDesign(page, 'Chọn bố cục: Chân dung · 1 ảnh');
   const buffer=await sharp(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="800" height="1000" fill="#90b2b8"/><rect x="400" width="400" height="1000" fill="#d8aa77"/><circle cx="280" cy="300" r="160" fill="#8a3455"/></svg>')).png().toBuffer();
   await page.getByLabel('Tải ảnh từ thiết bị',{exact:true}).setInputFiles({name:'crop-test.png',mimeType:'image/png',buffer});
+  await expect(page.locator('.photo-tray__pick--selected')).toHaveCount(1);
   const zoom=page.getByRole('slider',{name:'Thu phóng',exact:true});
   const open=page.locator('.studio__slot').first();
   await open.click();

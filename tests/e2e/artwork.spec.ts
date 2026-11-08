@@ -1,3 +1,4 @@
+import { chooseDesign } from './helpers/studio-tools';
 import { openSlotTools, closeSlotTools } from './helpers/slot-tools';
 import { test, expect } from '@playwright/test';
 import { chooseFilter } from './helpers/filter-dropdown';
@@ -79,10 +80,10 @@ test('authored heart star and arch layouts retain natural shapes in previews', a
 test('shape filters, independent artwork selection and a real PNG download', async ({ page }) => {
   await page.goto('/setup');
   await chooseFilter(page, 'Bộ sưu tập', 'Bộ thiết kế nổi bật');
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(13);
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).toHaveCount(13);
   await chooseFilter(page, "Số ảnh", "2 ảnh");
   await chooseFilter(page, "Phong cách bố cục", "Hình đặc biệt");
-  await page.getByRole('button', { name: 'Chọn bố cục: Hai trái tim · 2 ảnh', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Hai trái tim · 2 ảnh');
   const buffer = await sharp({ create: { width: 800, height: 1000, channels: 3, background: '#c08166' } }).png().toBuffer();
   await page.getByLabel('Tải ảnh từ thiết bị', { exact: true }).setInputFiles([
     { name: 'portrait-a.png', mimeType: 'image/png', buffer },
@@ -91,7 +92,7 @@ test('shape filters, independent artwork selection and a real PNG download', asy
   await openSlotTools(page);
   await page.getByRole('slider', { name: 'Thu phóng', exact: true }).fill('1.4');
   await closeSlotTools(page);
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Chrome mộng mơ', exact: true }).click();
+  await chooseDesign(page, 'Chọn mẫu frame: Chrome mộng mơ');
   await openSlotTools(page);
   await expect(page.getByRole('slider', { name: 'Thu phóng', exact: true })).toHaveValue('1.4');
   await closeSlotTools(page);

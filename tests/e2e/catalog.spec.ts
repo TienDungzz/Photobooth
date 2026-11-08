@@ -1,3 +1,4 @@
+import { chooseDesign, showStudioTool } from './helpers/studio-tools';
 import { test, expect } from '@playwright/test';
 import { chooseFilter } from './helpers/filter-dropdown';
 
@@ -23,18 +24,16 @@ test('shared wide page bounds and independent combined catalog filters', async (
   if (testInfo.project.name === 'desktop') expect(bounds.header).toBe(1760);
   await chooseFilter(page, 'Bộ sưu tập', 'Hoa & lá');
   await expect(page.locator('.design-picker input')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).not.toHaveCount(0);
-  await page
-    .getByRole('button', { name: 'Chọn mẫu frame: Lá non · Góc xinh', exact: true })
-    .click();
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).not.toHaveCount(0);
+  await chooseDesign(page, 'Chọn mẫu frame: Lá non · Góc xinh');
   await chooseFilter(page, 'Số ảnh', '12 ảnh');
   await chooseFilter(page, 'Phong cách bố cục', 'Cơ bản');
   const selected = page.getByRole('button', {
     name: 'Chọn mẫu frame: Lá non · Góc xinh',
-    exact: true,
+    exact: true, includeHidden: true,
   });
   await expect(selected).toHaveAttribute('aria-pressed', 'true');
-  const layouts = page.getByRole('button', { name: /^Chọn bố cục:/ });
+  const layouts = page.getByRole('button', { name: /^Chọn bố cục:/, includeHidden: true });
   expect(await layouts.count()).toBeGreaterThan(0);
   const names = await layouts.evaluateAll((nodes) =>
     nodes.map((node) => node.getAttribute('aria-label')),
@@ -57,11 +56,12 @@ test('shared wide page bounds and independent combined catalog filters', async (
 
 test('all frames and layouts appear together without counts or pagination', async ({ page }) => {
   await page.goto('/setup');
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(62);
-  await expect(page.getByRole('button', { name: /^Chọn bố cục:/ })).toHaveCount(93);
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).toHaveCount(62);
+  await expect(page.getByRole('button', { name: /^Chọn bố cục:/, includeHidden: true })).toHaveCount(93);
   await expect(page.getByRole('button', { name: /Xem thêm|Show.*more/ })).toHaveCount(0);
   await expect(page.locator('.design-picker__results')).toHaveCount(0);
-  for (const rail of await page.locator('.design-picker__rail').all()) {
+  for (const [index, rail] of (await page.locator('.design-picker__rail').all()).entries()) {
+    await showStudioTool(page, index === 0 ? 'frame' : 'layout');
     const last = rail.locator('.design-card').last();
     await last.click();
     await expect(last).toHaveAttribute('aria-pressed', 'true');

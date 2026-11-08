@@ -1,3 +1,4 @@
+import { chooseDesign, showStudioTool } from './helpers/studio-tools';
 import { openSlotTools, closeSlotTools } from './helpers/slot-tools';
 import { test, expect } from '@playwright/test';
 import { chooseFilter } from './helpers/filter-dropdown';
@@ -53,15 +54,13 @@ test('gallery filters, locale/theme and responsive layout', async ({ page }, tes
   await expect(
     page.getByRole('heading', { name: 'Những khoảnh khắc mình giữ lại.' }),
   ).toBeVisible();
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(62);
-  await expect(page.getByRole('button', { name: /^Chọn bố cục:/ })).toHaveCount(93);
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).toHaveCount(62);
+  await expect(page.getByRole('button', { name: /^Chọn bố cục:/, includeHidden: true })).toHaveCount(93);
   await chooseFilter(page, 'Số ảnh', '20 ảnh');
-  await page
-    .getByRole('button', { name: 'Chọn bố cục: Hai mươi ảnh · 20 ảnh', exact: true })
-    .click();
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Ruy băng & ren', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Hai mươi ảnh · 20 ảnh');
+  await chooseDesign(page, 'Chọn mẫu frame: Ruy băng & ren');
   await expect(
-    page.getByRole('button', { name: 'Chọn bố cục: Hai mươi ảnh · 20 ảnh', exact: true }),
+    page.getByRole('button', { name: 'Chọn bố cục: Hai mươi ảnh · 20 ảnh', exact: true, includeHidden: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await page.screenshot({ path: 'test-results/design-picker-' + testInfo.project.name + '.png' });
   await page.getByRole('button', { name: 'Thiết lập', exact: true }).click();
@@ -87,19 +86,19 @@ test('upload, crop and export PNG/JPEG without network photo uploads', async ({
     if (['POST', 'PUT'].includes(request.method())) requests.push(request.url());
   });
   await page.goto('/setup');
-  await page.getByRole('button', { name: 'Chọn bố cục: Chân dung · 1 ảnh', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Chân dung · 1 ảnh');
 
   await page.getByLabel('Tải ảnh từ thiết bị', { exact: true }).setInputFiles(file);
   await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeEnabled();
   await openSlotTools(page);
   await page.getByRole('slider', { name: 'Thu phóng', exact: true }).fill('1.5');
   await closeSlotTools(page);
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Ruy băng & ren', exact: true }).click();
+  await chooseDesign(page, 'Chọn mẫu frame: Ruy băng & ren');
   await openSlotTools(page);
   await expect(page.getByRole('slider', { name: 'Thu phóng', exact: true })).toHaveValue('1.5');
   await closeSlotTools(page);
   await expect(
-    page.getByRole('button', { name: 'Chọn bố cục: Chân dung · 1 ảnh', exact: true }),
+    page.getByRole('button', { name: 'Chọn bố cục: Chân dung · 1 ảnh', exact: true, includeHidden: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await openSlotTools(page);
   await page.getByRole('button', { name: 'Xoay 90°', exact: true }).click();
@@ -130,7 +129,7 @@ test('upload, crop and export PNG/JPEG without network photo uploads', async ({
 
 test('rejects unsupported content without losing a valid photo', async ({ page }) => {
   await page.goto('/setup');
-  await page.getByRole('button', { name: 'Chọn bố cục: Chân dung · 1 ảnh', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Chân dung · 1 ảnh');
 
   await page
     .getByLabel('Tải ảnh từ thiết bị', { exact: true })
@@ -148,16 +147,14 @@ test('rejects unsupported content without losing a valid photo', async ({ page }
 
 test('changing layout preserves decoration and photo tray', async ({ page }) => {
   await page.goto('/setup');
-  await page.getByRole('button', { name: 'Chọn bố cục: Chân dung · 1 ảnh', exact: true }).click();
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Ruy băng & ren', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Chân dung · 1 ảnh');
+  await chooseDesign(page, 'Chọn mẫu frame: Ruy băng & ren');
 
   await page.getByLabel('Tải ảnh từ thiết bị', { exact: true }).setInputFiles(file);
   await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeEnabled();
-  await page
-    .getByRole('button', { name: 'Chọn bố cục: Ba nhịp yêu thương · 3 ảnh', exact: true })
-    .click();
+  await chooseDesign(page, 'Chọn bố cục: Ba nhịp yêu thương · 3 ảnh');
   await expect(
-    page.getByRole('button', { name: 'Chọn mẫu frame: Ruy băng & ren', exact: true }),
+    page.getByRole('button', { name: 'Chọn mẫu frame: Ruy băng & ren', exact: true, includeHidden: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeDisabled();
   await expect(page.locator('.photo-tray__item')).toHaveCount(1);
@@ -166,10 +163,9 @@ test('changing layout preserves decoration and photo tray', async ({ page }) => 
 
 test('camera burst captures, keeps completed photos, then releases camera', async ({ page }) => {
   await page.goto('/setup');
-  await page
-    .getByRole('button', { name: 'Chọn bố cục: Classic photostrip · 4 ảnh', exact: true })
-    .click();
+  await chooseDesign(page, 'Chọn bố cục: Classic photostrip · 4 ảnh');
 
+  await showStudioTool(page, 'photos');
   await page.getByRole('button', { name: 'Mở camera', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Bắt đầu chụp', exact: true })).toBeEnabled({
     timeout: 15000,

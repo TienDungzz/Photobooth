@@ -1,3 +1,4 @@
+import { chooseDesign } from './helpers/studio-tools';
 import { openSlotTools, closeSlotTools } from './helpers/slot-tools';
 import { test, expect } from '@playwright/test';
 import { chooseFilter } from './helpers/filter-dropdown';
@@ -45,21 +46,21 @@ test('expressive masks and layered layouts render and encode without missing ass
 test('browser layout retains its structure and crop when switching expressive frames and exporting', async ({ page }) => {
   await page.goto('/setup');
   await chooseFilter(page, 'Bộ sưu tập', 'Bộ thiết kế nổi bật');
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(13);
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).toHaveCount(13);
   await chooseFilter(page, "Số ảnh", "3 ảnh");
   await chooseFilter(page, "Phong cách bố cục", "Phá cách");
-  await page.getByRole('button', { name: 'Chọn bố cục: Ba cửa sổ ký ức · 3 ảnh', exact: true }).click();
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Sau giờ lên đèn', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Ba cửa sổ ký ức · 3 ảnh');
+  await chooseDesign(page, 'Chọn mẫu frame: Sau giờ lên đèn');
   const buffer = await sharp({ create: { width: 800, height: 1000, channels: 3, background: '#80a0c0' } }).png().toBuffer();
   await page.getByLabel('Tải ảnh từ thiết bị', { exact: true }).setInputFiles([1,2,3].map((i) => ({ name: `portrait-${i}.png`, mimeType: 'image/png', buffer })));
   await openSlotTools(page);
   await page.getByRole('slider', { name: 'Thu phóng', exact: true }).fill('1.3');
   await closeSlotTools(page);
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Một ngày tinh nghịch', exact: true }).click();
+  await chooseDesign(page, 'Chọn mẫu frame: Một ngày tinh nghịch');
   await openSlotTools(page);
   await expect(page.getByRole('slider', { name: 'Thu phóng', exact: true })).toHaveValue('1.3');
   await closeSlotTools(page);
-  await expect(page.getByRole('button', { name: 'Chọn bố cục: Ba cửa sổ ký ức · 3 ảnh', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: 'Chọn bố cục: Ba cửa sổ ký ức · 3 ảnh', exact: true, includeHidden: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true }).click();
   await expect(page.locator('.finish__preview canvas')).toHaveAttribute('data-render-state', 'ready');
   await page.locator('.finish select').first().selectOption('png');

@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { chooseFilter } from './helpers/filter-dropdown';
+import { showStudioTool } from './helpers/studio-tools';
 
 test('three custom filters support keyboard typeahead, cancellation and an unclipped popup', async ({ page }, info) => {
   await page.goto('/setup');
   await expect(page.locator('.design-picker select')).toHaveCount(0);
-  await expect(page.locator('.design-picker').getByRole('combobox')).toHaveCount(3);
+  await expect(page.locator('.design-picker').getByRole('combobox', { includeHidden: true })).toHaveCount(3);
+  await showStudioTool(page, 'layout');
   const count = page.getByRole('combobox', { name: 'Số ảnh', exact: true });
   await count.focus();
   await count.press('2'); await count.press('0');
@@ -16,14 +18,15 @@ test('three custom filters support keyboard typeahead, cancellation and an uncli
   await expect(count).toHaveText('Tất cả số ảnh');
   await count.press('2'); await count.press('0'); await count.press('Enter');
   await expect(count).toHaveText('20 ảnh');
-  await expect(page.getByRole('button', { name: /^Chọn bố cục:/ })).toHaveCount(1);
+  await expect(page.getByRole('button', { name: /^Chọn bố cục:/, includeHidden: true })).toHaveCount(1);
   await count.press('ArrowDown'); await count.press('Home'); await count.press('ArrowDown'); await count.press('Enter');
   await expect(count).toHaveText('1 ảnh');
   await chooseFilter(page, 'Bộ sưu tập', 'Bộ thiết kế nổi bật');
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(13);
-  await page.locator('.design-picker__section').nth(1).getByRole('button', { name: 'Xóa bộ lọc', exact: true }).click();
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).toHaveCount(13);
+  await chooseFilter(page, 'Số ảnh', 'Tất cả số ảnh');
+  await expect(page.getByRole('button', { name: 'Xóa bộ lọc', exact: true })).toHaveCount(0);
   await expect(count).toHaveText('Tất cả số ảnh');
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(13);
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).toHaveCount(13);
   const style = page.getByRole('combobox', { name: 'Phong cách bố cục', exact: true });
   await style.focus(); await style.press('p'); await style.press('h'); await style.press('a'); await style.press('Enter');
   await expect(style).toHaveText('Phá cách');
@@ -35,7 +38,7 @@ test('three custom filters support keyboard typeahead, cancellation and an uncli
   expect(bounds.left).toBeGreaterThanOrEqual(0); expect(bounds.top).toBeGreaterThanOrEqual(0);
   expect(bounds.right).toBeLessThanOrEqual(bounds.width); expect(bounds.bottom).toBeLessThanOrEqual(bounds.height);
   await page.screenshot({ path: `test-results/custom-dropdown-${info.project.name}.png` });
-  await page.locator('.header__language').focus();
+  await page.locator('.header__gallery').focus();
   await expect(page.getByRole('listbox')).toHaveCount(0);
-  await expect(page.locator('.header__language')).toBeFocused();
+  await expect(page.locator('.header__gallery')).toBeFocused();
 });

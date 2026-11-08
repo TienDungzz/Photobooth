@@ -1,3 +1,4 @@
+import { chooseDesign, showStudioTool } from './helpers/studio-tools';
 import { expect, test } from '@playwright/test';
 import sharp from 'sharp';
 
@@ -5,10 +6,11 @@ test('custom confirmations cancel safely and only remove photos or reset after a
   const nativeDialogs:string[]=[];
   page.on('dialog',async dialog=>{nativeDialogs.push(dialog.type());await dialog.dismiss();});
   await page.goto('/setup');
-  await page.getByRole('button',{name:'Chọn bố cục: Chân dung · 1 ảnh',exact:true}).click();
+  await chooseDesign(page, 'Chọn bố cục: Chân dung · 1 ảnh');
   const buffer=await sharp({create:{width:800,height:1000,channels:3,background:'#dcb985'}}).png().toBuffer();
   const upload=()=>page.getByLabel('Tải ảnh từ thiết bị',{exact:true}).setInputFiles({name:'portrait.png',mimeType:'image/png',buffer});
   await upload();
+  await showStudioTool(page, 'photos');
   const remove=page.getByRole('button',{name:'Xóa ảnh 1',exact:true});
   await remove.click();
   const dialog=page.getByRole('alertdialog',{name:'Xóa ảnh này?',exact:true});
@@ -25,7 +27,9 @@ test('custom confirmations cancel safely and only remove photos or reset after a
   await page.screenshot({path:`test-results/confirm-delete-${info.project.name}.png`});
   await dialog.getByRole('button',{name:'Xóa ảnh',exact:true}).click();
   await expect(remove).toHaveCount(0);
-  await expect(page.locator('.photo-tray')).toBeFocused();
+  if (info.project.name === 'mobile')
+    await expect(page.locator('.studio__sidebar > .panel .button--primary')).toBeFocused();
+  else await expect(page.locator('.photo-tray')).toBeFocused();
   await expect(page.getByRole('button',{name:'Hoàn tất ảnh',exact:true})).toBeDisabled();
   await upload();
   await page.getByRole('button',{name:'Hoàn tất ảnh',exact:true}).click();

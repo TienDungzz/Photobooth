@@ -1,3 +1,4 @@
+import { chooseDesign } from './helpers/studio-tools';
 import { openSlotTools, closeSlotTools } from './helpers/slot-tools';
 import { test, expect } from '@playwright/test';
 import { chooseFilter } from './helpers/filter-dropdown';
@@ -64,13 +65,11 @@ test('ticket layout exports a visible stub and keeps crops when changing occasio
 }) => {
   await page.goto('/setup');
   await chooseFilter(page, 'Bộ sưu tập', 'Bộ thiết kế nổi bật');
-  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(13);
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/, includeHidden: true })).toHaveCount(13);
   await chooseFilter(page, "Số ảnh", "2 ảnh");
   await chooseFilter(page, "Phong cách bố cục", "Phá cách");
-  await page
-    .getByRole('button', { name: 'Chọn bố cục: Hai vé kỷ niệm · 2 ảnh', exact: true })
-    .click();
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Đêm hội bí ngô', exact: true }).click();
+  await chooseDesign(page, 'Chọn bố cục: Hai vé kỷ niệm · 2 ảnh');
+  await chooseDesign(page, 'Chọn mẫu frame: Đêm hội bí ngô');
   const buffer = await sharp({
     create: { width: 800, height: 1000, channels: 3, background: '#80a0c0' },
   })
@@ -84,7 +83,7 @@ test('ticket layout exports a visible stub and keeps crops when changing occasio
   await openSlotTools(page);
   await page.getByRole('slider', { name: 'Thu phóng', exact: true }).fill('1.25');
   await closeSlotTools(page);
-  await page.getByRole('button', { name: 'Chọn mẫu frame: Lời hẹn sắc ngà', exact: true }).click();
+  await chooseDesign(page, 'Chọn mẫu frame: Lời hẹn sắc ngà');
   await openSlotTools(page);
   await expect(page.getByRole('slider', { name: 'Thu phóng', exact: true })).toHaveValue('1.25');
   await closeSlotTools(page);
