@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { ArrowLeft, Download, ExternalLink, Flower2, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Download, Flower2, RotateCcw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Composition, Design, Photo } from '../../domain/types';
 import { FrameCanvas } from '../frame-preview';
@@ -12,12 +12,14 @@ export function Finish({
   composition,
   onBack,
   onNew,
+  onArchive,
 }: {
   frame: Design;
   photos: Photo[];
   composition: Composition;
   onBack: () => void;
   onNew: () => void;
+  onArchive: (file: File) => Promise<void>;
 }) {
   const { t } = useTranslation();
   const [format, setFormat] = useState<'png' | 'jpeg'>('jpeg');
@@ -32,6 +34,9 @@ export function Finish({
   const { file, url: result, error, busy } = usePreparedExport(request);
   const sharing = useRef(false);
   const alive = useRef(true);
+  const [archiveMessage, setArchiveMessage] = useState('');
+  const archiveJobs = useRef(new Map<File, Promise<void>>());
+  const latestArchive = useRef<File | null>(null);
   useEffect(() => {
     alive.current = true;
     return () => {
@@ -46,6 +51,27 @@ export function Finish({
     const timer = window.setTimeout(() => setMessage(''), 4000);
     return () => clearTimeout(timer);
   }, [message]);
+  useEffect(() => {
+    if (archiveMessage !== 'savedToGallery') return;
+    const timer = window.setTimeout(() => setArchiveMessage(''), 4000);
+    return () => clearTimeout(timer);
+  }, [archiveMessage]);
+  const archive = (file: File) => {
+    if (archiveJobs.current.has(file)) return;
+    latestArchive.current = file;
+    setArchiveMessage('savingGallery');
+    const job = onArchive(file)
+      .then(() => {
+        if (alive.current && latestArchive.current === file) setArchiveMessage('savedToGallery');
+      })
+      .catch(() => {
+        if (alive.current && latestArchive.current === file) setArchiveMessage('error.saveGallery');
+      })
+      .finally(() => {
+        archiveJobs.current.delete(file);
+      });
+    archiveJobs.current.set(file, job);
+  };
   const download = () => {
     if (busy || sharing.current) return;
     if (!file || !result) {
@@ -53,6 +79,7 @@ export function Finish({
       return;
     }
     setMessage('');
+    archive(file);
     const isAppleMobile =
       /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -159,11 +186,13 @@ export function Finish({
               {t(error || message)}
             </p>
           )}
-          {result && (
-            <a className="button" href={result} target="_blank" rel="noopener noreferrer">
-              <ExternalLink size={16} />
-              {t('openImage')}
-            </a>
+          {archiveMessage && (
+            <p
+              className={`notice${archiveMessage.startsWith('error') ? ' notice--error' : ''}`}
+              role="status"
+            >
+              {t(archiveMessage)}
+            </p>
           )}
           <button className="button button--full" onClick={onBack} disabled={busy}>
             <ArrowLeft size={17} />
