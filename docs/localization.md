@@ -6,7 +6,7 @@ Thuộc phiên bản đầu, hỗ trợ tiếng Việt (vi) và tiếng Anh (en)
 
 ## 2. Chọn và chuyển ngôn ngữ
 
-- Đặt bộ chọn ngôn ngữ trong vùng thiết lập dễ tìm ở mọi bước. Hiển thị tên bản ngữ “Tiếng Việt”, “English”; không dùng cờ làm dấu hiệu duy nhất.
+- Bộ chọn ngôn ngữ chỉ nằm trong popup Thiết lập, không có nút đổi ngôn ngữ riêng trên header. Hiển thị tên bản ngữ “Tiếng Việt”, “English”; không dùng cờ làm dấu hiệu duy nhất.
 - Thứ tự xác định khi mở ứng dụng: lựa chọn hợp lệ đã lưu → ngôn ngữ trình duyệt được hỗ trợ → tiếng Việt. Quy các locale như `vi-VN` về `vi`, `en-US` về `en`.
 - Khi người dùng đã chọn, giữ lựa chọn đó; không tự đổi theo trình duyệt giữa phiên.
 - Đổi ngôn ngữ không reload trang, không remount toàn bộ editor và không xóa ảnh/crop/frame. State camera và lịch chụp độc lập với locale; không tạo lại timer khi thay bản dịch.

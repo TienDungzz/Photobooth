@@ -42,7 +42,7 @@ Ngoài phạm vi ban đầu: đăng nhập, đồng bộ đám mây, thư viện
 - **Frame:** mẫu trang trí gồm nền giấy, viền, hoa lá, ren/ruy băng, họa tiết và chữ; không gắn cố định với bố cục hoặc số ảnh.
 - **Biến thể:** phiên bản màu hoặc trang trí của một frame; không tính thành bố cục mới.
 
-Frame và layout phải có hai panel chọn riêng như ảnh tham chiếu, với thumbnail, trạng thái chọn và dải card cuộn ngang. Layout có nhóm Tất cả, 2–3, 4–6, 8–12, 16–20 ảnh. Nhiều layout có cùng số ảnh nhưng cách sắp xếp khác nhau. Không tính phép nhân màu/phong cách với số layout thành số frame. Hiện có 62 frame và 93 layout độc lập; tiếp tục mở rộng theo nhu cầu nội dung. Chi tiết tại [frame và layout](frame-layout-selection.md).
+Frame và layout có bộ chọn riêng với thumbnail và trạng thái chọn. Desktop dùng grid cuộn; tablet/mobile dùng dải ngang. Layout lọc theo số ảnh chính xác 1–20 và phong cách; frame lọc Bộ sưu tập. Không có nút xóa lọc/hiện mục đang chọn. Nhiều layout có cùng số ảnh nhưng cách sắp xếp khác nhau. Không tính phép nhân màu/phong cách với số layout thành số frame. Hiện có 62 frame và 93 layout độc lập; tiếp tục mở rộng theo nhu cầu nội dung. Chi tiết tại [frame và layout](frame-layout-selection.md).
 
 | Nhóm | Ví dụ bố cục |
 | --- | --- |
@@ -108,7 +108,7 @@ Chỉ xin quyền camera khi người dùng bấm mở camera. Không yêu cầu
 - Trạng thái lỗi có nội dung và hành động tiếp theo, không chỉ đổi màu.
 - Giảm chuyển động khi người dùng bật tùy chọn tương ứng; tránh flash toàn màn hình bắt buộc.
 - Không lưu ảnh, camera stream hoặc dữ liệu ảnh trong analytics/log. Nếu sau này thêm upload phải có đặc tả và thông báo riêng.
-- Không mặc định duy trì ảnh sau reload. Trước thao tác rời trang khi có dữ liệu chưa xuất, dùng cảnh báo của trình duyệt nếu được hỗ trợ.
+- Chỉnh sửa chưa bấm tải chỉ tồn tại trong phiên. Khi bấm tải, lưu project trong Kho ảnh cục bộ 7 ngày, có xem/tải lại/chỉnh sửa/xóa; không dùng cookie chứa ảnh, không tự đồng bộ. Trước thao tác rời trang khi có dữ liệu trong phiên, dùng cảnh báo trình duyệt nếu được hỗ trợ. Xem [Kho ảnh](saved-gallery.md).
 - Tải thumbnail trước, chỉ tải tài nguyên độ phân giải cao khi cần. Có trạng thái chờ và xử lý lỗi asset.
 
 ## 9. Tiêu chí nghiệm thu

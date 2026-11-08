@@ -8,7 +8,7 @@ Thiết kế hiện tại ưu tiên [Home và Setup](home-and-setup.md): Home qu
 
 ## 2. Khung ứng dụng
 
-- Header gồm tên sản phẩm, vị trí hiện tại và nút thiết lập ngôn ngữ/theme.
+- Header gồm logo về Home, điều hướng desktop, Kho ảnh kèm badge và Thiết lập. Mobile ẩn hàng Trang chủ/Studio, Kho ảnh chỉ hiện icon/badge. Ngôn ngữ/theme chỉ chọn trong popup Thiết lập.
 - Tiến trình: Home → Setup (thiết kế và ảnh cùng một màn hình) → Thành phẩm. Camera là dialog của Setup.
 - Quay lại bước trước giữ ảnh và chỉnh sửa; không reload trang. Rời ứng dụng có dữ liệu chưa xuất dùng cảnh báo trình duyệt khi được hỗ trợ.
 - Thiết lập mở bằng panel/dialog có nhãn; đóng trả focus về nút mở. Thay locale/theme áp dụng ngay theo [localization](localization.md) và [theme](theme.md).
@@ -28,14 +28,14 @@ Thiết kế hiện tại ưu tiên [Home và Setup](home-and-setup.md): Home qu
 
 Hai panel thu gọn độc lập theo [ảnh tham chiếu và đặc tả](frame-layout-selection.md). Frame card là trang giấy trang trí không có ô; layout card là sơ đồ ô trung tính không có họa tiết frame. Mỗi panel có tên lựa chọn hiện tại và trạng thái được chọn.
 
-Dải card cuộn ngang bên trong panel; layout có nhóm Tất cả, 2–3, 4–6, 8–12, 16–20. Chọn một mục không tự chuyển bước hoặc xóa bộ lọc. Preview kết hợp cập nhật ngay; nguồn ảnh/camera ở cột phải trên cùng trang Setup.
+Desktop dùng grid cuộn dọc, tablet/mobile dùng dải card cuộn ngang. Layout lọc số ảnh chính xác 1–20 và phong cách; frame lọc Bộ sưu tập. Không có nút xóa lọc/hiện mục đang chọn. Chọn một mục không tự chuyển bước; preview kết hợp cập nhật ngay. Trên mobile, chọn Frame/Bố cục/Ảnh mở một vùng công cụ cố định phía dưới và cuộn preview vào vùng nhìn thấy; thanh chọn ba mục không sticky.
 
 ## 5. Editor và thao tác ảnh
 
 - Ô trống có số thứ tự và hành động thêm ảnh. Ô đang chọn có viền/focus rõ; không đưa viền này vào export.
-- Chọn ô mở công cụ: thay ảnh, chụp lại, zoom, xoay, phản chiếu và khôi phục căn chỉnh. Chụp lại cần xác nhận dùng ảnh mới trước khi thay ảnh cũ.
+- Bấm ô có ảnh mở popup crop trực tiếp, gồm zoom, xoay, phản chiếu, khôi phục căn chỉnh và bỏ ảnh; Hủy không áp dụng bản nháp. Không có nút chụp lại ô hoặc đổi với ô khác. Bấm ô trống trên mobile chuyển sang mục Ảnh để chọn từ khay/tải/chụp.
 - Kéo để dịch ảnh trong ô; pinch để zoom trên thiết bị hỗ trợ. Luôn có slider/nút thay thế cho thao tác gesture, và điều khiển bàn phím khi focus ở công cụ.
-- Đổi thứ tự bằng chọn ảnh từ khay rồi gán ô hoặc hành động đổi vị trí có nhãn; kéo thả là tiện ích bổ sung, không phải cách duy nhất.
+- Chọn ô rồi chọn ảnh trong khay để gán hoặc thay ảnh; mỗi ô có transform riêng dù dùng cùng một ảnh. Không có nút đổi vị trí hai ô.
 - Khay thể hiện ảnh đã dùng/chưa dùng. Xóa ảnh đang dùng phải nói rõ ảnh hưởng tới các ô liên quan và cho hủy trước khi xóa.
 - Đổi frame giữ nguyên layout/crop; đổi layout giữ frame và ảnh, reset crop theo tỷ lệ mới và báo ô thiếu/ảnh dư.
 - Thiếu ô bắt buộc: vẫn giữ nút “Hoàn tất ảnh” trong bố cục, hiển thị lý do chưa thể tiếp tục và hành động tới ô trống đầu tiên.

@@ -5,7 +5,7 @@
 - Frame: chỉ có **Bộ sưu tập**. Có tất cả, artwork nổi bật, cơ bản và các chủ đề hiện có.
 - Layout: chỉ có **Số ảnh** và **Phong cách bố cục**. Đã bỏ hoàn toàn ô nhập tìm kiếm, state query và logic so khớp từ khóa; không có bộ lọc phụ mới thay thế.
 - Phong cách gồm **Cơ bản**, **Hình đặc biệt**, **Phá cách**. Cơ bản là ô rect/rounded không xoay, không treatment; hình đặc biệt là các mask như tim/tròn/sao/vòm; phá cách gồm góc xoay, treatment hoặc blob/cutout/torn/apple. Mỗi layout thuộc đúng một nhóm.
-- “Xóa bộ lọc” chỉ hiện khi danh mục đó có điều kiện đang bật. Xóa lọc không thay frame/layout đã chọn hoặc ảnh/crop, và không xóa bộ lọc danh mục còn lại.
+- Không có nút “Xóa bộ lọc” hoặc “Hiện mục đang chọn”. Chọn giá trị “Tất cả” trong dropdown để bỏ điều kiện; không thay frame/layout đã chọn hoặc ảnh/crop và không đổi bộ lọc danh mục còn lại. Mobile cần mở mục Frame hoặc Bố cục trước khi thao tác bộ lọc tương ứng.
 
 ## Kết hợp bộ lọc
 

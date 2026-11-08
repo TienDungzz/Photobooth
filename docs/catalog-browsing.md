@@ -11,15 +11,15 @@
 
 Frame có một dropdown **Bộ sưu tập**. Layout có hai dropdown **Số ảnh / Phong cách bố cục**; không có tìm kiếm, bộ lọc tông màu, tỷ lệ, category, mask riêng hoặc chip nhóm số ảnh. Logic query và metadata từ khóa đã được gỡ. Xem [bộ lọc và custom dropdown](catalog-filters.md).
 
-Các điều kiện trong cùng danh mục kết hợp với nhau; lọc frame không lọc layout và ngược lại. Không có kết quả sẽ hiển thị hướng dẫn đổi/xóa bộ lọc. “Xóa bộ lọc” chỉ đặt lại bộ lọc của danh mục đó, không thay frame/layout đang dùng hoặc xóa ảnh.
+Các điều kiện trong cùng danh mục kết hợp với nhau; lọc frame không lọc layout và ngược lại. Không có kết quả sẽ hiển thị hướng dẫn đổi điều kiện. Không có nút “Xóa bộ lọc” hoặc “Hiện mục đang chọn”; chọn “Tất cả” trong dropdown để bỏ điều kiện, không đổi thiết kế hoặc ảnh.
 
-Mỗi danh mục hiển thị toàn bộ kết quả phù hợp trong một lượt, không chia trang, không có dòng đếm kết quả hoặc nút “Xem thêm”. Desktop giữ grid có max-height và cuộn dọc riêng; tablet/mobile giữ dải cuộn ngang. “Hiện mục đang chọn” xuất hiện khi lựa chọn bị bộ lọc ẩn; hành động này xóa bộ lọc của danh mục tương ứng.
+Mỗi danh mục hiển thị toàn bộ kết quả phù hợp trong một lượt, không chia trang, không có dòng đếm kết quả hoặc nút “Xem thêm”. Desktop giữ grid có max-height và cuộn dọc riêng; tablet/mobile giữ dải cuộn ngang. Mobile mở từng mục Frame/Bố cục trong vùng công cụ cố định phía dưới, ẩn nhãn card và bộ lọc, giữ tên truy cập đầy đủ.
 
 ## Bố trí
 
 Bộ chọn hiện chỉ nằm trên `/setup`, không nằm trên Home. Studio dùng bộ chọn gọn bên trái, preview giữa, ảnh/công cụ bên phải; Home chỉ có các bản in minh họa và link vào Studio. Xem [Home và Setup](home-and-setup.md).
 
-Header, main và footer dùng chung biến --page-width: 1800px. Header/main có cùng padding theo breakpoint; header Setup gọn về chiều cao. Các dải thumbnail/filter có vùng cuộn riêng tại cột trái. Mobile xếp một cột và chặn min-content của rail làm nở trang.
+Header, main và footer dùng chung biến --page-width: 1760px. Header/main có cùng padding theo breakpoint; header Setup gọn về chiều cao. Các dải thumbnail/filter có vùng cuộn riêng tại cột trái. Mobile xếp một cột và chặn min-content của rail làm nở trang.
 
 ## Mã nguồn và kiểm tra
 

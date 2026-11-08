@@ -10,7 +10,9 @@ Trên mobile, thanh **Frame / Bố cục / Ảnh** cuộn cùng trang, không st
 
 ## Mục đích hai trang
 
-- **Home — `/`:** giới thiệu Photobooth bằng banner lớn, minh họa bộ frame, điểm nổi bật và lời mời tạo ảnh. Nút bắt đầu/khám phá dẫn tới `/setup`. Không có bộ lọc, file input, khay ảnh hoặc yêu cầu quyền camera trên Home. Header chỉ có Trang chủ và Studio; đã bỏ mục Cách sử dụng, modal hướng dẫn, liên kết trong banner và phần hướng dẫn ba bước.
+Header hiện có Kho ảnh kèm badge và Thiết lập. Mobile ẩn điều hướng Trang chủ/Studio, chỉ dùng logo để về Home và icon Kho ảnh. Ngôn ngữ chỉ nằm trong popup Thiết lập. Dải điểm nổi bật trên Home chia đều 4 cột theo toàn chiều rộng nội dung desktop; màn hình tối đa 760 px chuyển 1 cột, căn giữa từng mục. Thanh hoàn tất mobile cao 60 px cộng safe area, mô tả rút gọn một dòng nếu dài.
+
+- **Home — `/`:** giới thiệu Photobooth bằng banner lớn, minh họa bộ frame, điểm nổi bật và lời mời tạo ảnh. Nút bắt đầu/khám phá dẫn tới `/setup`. Không có bộ lọc, file input, khay ảnh hoặc yêu cầu quyền camera trên Home. Điều hướng desktop có Trang chủ/Studio; đã bỏ mục Cách sử dụng, modal hướng dẫn, liên kết trong banner và phần hướng dẫn ba bước.
 - **Setup — `/setup`:** không gian tạo ảnh duy nhất, cùng chọn frame, layout và nguồn ảnh; không có bước gallery riêng trước editor.
 - **Hoàn tất ảnh — `/setup/preview`:** chọn PNG/JPEG, kích thước, tải ảnh hoặc quay lại Setup. Nếu mở trực tiếp mà phiên không có đủ ảnh, tự trở về `/setup`.
 
@@ -26,17 +28,17 @@ Setup desktop theo bố cục ba cột của ảnh tham chiếu:
 
    Bộ lọc gồm Bộ sưu tập cho frame, Số ảnh và Phong cách cho layout. Dùng custom dropdown có bàn phím và popup không bị cắt trong sidebar. Đã bỏ tìm kiếm catalog và xử lý từ khóa. Xem [bộ lọc gọn](catalog-filters.md).
 2. Giữa: canvas thành phẩm trực tiếp, selected slot và hướng dẫn căn chỉnh. Desktop dùng chiều cao viewport trừ sticky top 24 px và 110 px dành cho thanh hành động/khoảng hở; frame chừa thêm 100 px cho caption và hướng dẫn. Bỏ giới hạn cũ 510 px ngang/620 px dọc: ảnh mở rộng theo cột giữa và tỷ lệ layout, không kéo méo. Khi cuộn qua header, preview tận dụng gần hết chiều cao còn lại. Mobile vẫn giữ giới hạn riêng để phù hợp màn hình nhỏ.
-3. Phải: tải ảnh/mở camera, khay ảnh dạng grid và công cụ crop/zoom/xoay/mirror cho ô đang chọn.
+3. Phải: tải ảnh/mở camera và khay ảnh dạng grid. Bấm ô đã có ảnh để mở popup crop/zoom/xoay/mirror; không có nút chỉnh sửa riêng ở sidebar, chụp lại ô hoặc đổi với ô khác. Mobile thu gọn khoảng trống quanh crop, giữ Hủy/Áp dụng cùng hàng. Sau khi xóa ảnh, focus về khay trên desktop hoặc nút tải ảnh trên mobile nếu nút xóa không còn tồn tại.
 
 Thanh hành động ở đáy hiển thị số ô đã có ảnh, lý do chưa thể tiếp tục và nút “Hoàn tất ảnh”; có chừa vùng nội dung/safe area. Khi chưa đủ ô, nút bị khóa. Tablet thu gọn cột; điện thoại xếp preview, bộ chọn và nguồn ảnh thành một cột, không làm tràn ngang toàn trang.
 
-Header/main/footer tiếp tục có chung max-width 1800px. Header Setup gọn hơn Home để dành không gian làm việc. Theme sáng/tối và Việt/Anh áp dụng cả hai trang; màu frame/ảnh xuất không phụ thuộc theme UI.
+Header/main/footer tiếp tục có chung max-width 1760px. Header Setup gọn hơn Home để dành không gian làm việc. Theme sáng/tối và Việt/Anh áp dụng cả hai trang; màu frame/ảnh xuất không phụ thuộc theme UI.
 
 ## Điều hướng và dữ liệu phiên
 
 Đường dẫn dùng History API, hỗ trợ Back/Forward. Chuyển Home ↔ Setup trong cùng ứng dụng giữ frame, layout, ảnh và crop tại state gốc; không yêu cầu upload lại. Bắt đầu phiên mới vẫn cần xác nhận vì xóa ảnh hiện tại khỏi phiên.
 
-Rời Setup đóng camera và giải phóng stream đang dùng; không tự bật lại khi quay về Studio. Reload/đóng tab vẫn mất ảnh như chính sách phiên bản đầu, chỉ locale/theme được lưu. Vào trang preview thiếu ảnh được thay thế bằng route Setup, không tạo vòng Back.
+Rời Setup đóng camera và giải phóng stream đang dùng; không tự bật lại khi quay về Studio. Reload/đóng tab mất các chỉnh sửa chưa bấm tải. Bản đã bấm tải được lưu trong [Kho ảnh](saved-gallery.md) 7 ngày bằng IndexedDB, có thể mở `/gallery` từ header để xem hoặc khôi phục; không tự phục hồi phiên khi reload. Vào trang preview thiếu ảnh được thay thế bằng route Setup, không tạo vòng Back.
 
 ## Font và deploy
 
