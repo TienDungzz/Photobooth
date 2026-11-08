@@ -60,6 +60,10 @@ So sánh renderer bằng fixture cố định, khóa font/kích thước/môi tr
 
 ## 7. CI và điều kiện phát hành
 
+`tests/e2e/` và helpers là mã kiểm thử cần commit. Chỉ bỏ qua kết quả sinh tự động như `test-results/`, `playwright-report/`, `blob-report/`, `coverage/`; ảnh tham khảo `example/` giữ cục bộ và không commit. Helper Studio mở đúng mục Frame/Bố cục/Ảnh trước khi tương tác trên mobile; kiểm tra trạng thái của mục ẩn phải tách khỏi thao tác với mục đang hiển thị.
+
+Lượt kiểm tra 08/11/2026: verify đạt (32 unit test, 5 checker test, lint/typecheck/CSS/i18n/build/budget). E2E toàn bộ ghi nhận 80 đạt, 1 bỏ qua vì chỉ dành desktop và 1 lỗi focus khi xóa ảnh cuối trên mobile; đã sửa để trả focus về nút tải ảnh, kiểm thử lại xác nhận desktop/mobile đều đạt. Không diễn giải thành một lượt chạy toàn bộ 82 ca đều xanh sau sửa. Còn 12 cảnh báo heuristic vòng đời tài nguyên/module dài; chưa nghiệm thu Safari/iPhone/Android thật.
+
 Hiện chạy `npm run verify` cho lint/typecheck/CSS/format, unit test, test checker, checker nguồn/bản dịch, build và budget bundle; `npm run test:e2e` cho Chromium desktop/mobile giả lập. GitHub Actions đã được cấu hình chạy cả hai; chưa xác minh một lần chạy workflow trên GitHub. Visual diff baseline tự động và thử thiết bị thật vẫn là phần cần bổ sung.
 
 Lỗi mất ảnh, render sai, tự chụp ngoài phiên, lộ dữ liệu hoặc crash luồng chính chặn phát hành. Báo cáo cần build/commit, môi trường, fixture, bước tái hiện, kết quả, lỗi còn mở và ngoại lệ có người phụ trách. Release chỉ ghi hỗ trợ những môi trường đã kiểm chứng; phần chưa đo phải được nêu rõ.

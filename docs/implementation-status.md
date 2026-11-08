@@ -72,6 +72,10 @@ Sau đợt hiệu chỉnh frame/layout: verify đạt với 20 unit test, 5 test
 Các docs yêu cầu/tiêu chuẩn vẫn là mục tiêu nghiệm thu. Nếu chúng mô tả phần chưa có, dùng danh sách giới hạn này và code hiện tại để phân biệt với tính năng đã hoàn thành.
 # Tối ưu tải ảnh
 
+## Kho ảnh cục bộ
+
+Header có Kho ảnh (icon trên mobile), route `/gallery`. Bấm tải lưu thành phẩm và bản chỉnh sửa trong IndexedDB 7 ngày, mỗi bản xuất khác nội dung/chỉnh sửa có ID riêng; tải lại đúng cùng bản mới cập nhật cùng ID. Có xem, tải lại, khôi phục ảnh/crop/frame/layout và xóa có xác nhận; lỗi storage không chặn tải. Bản hết hạn bị ẩn và dọn khi ứng dụng chạy. Không dùng cookie chứa ảnh, không đồng bộ hay upload. Xem [đặc tả](saved-gallery.md). Verify và kiểm thử Chromium desktop/mobile cho lưu/restore/TTL/xóa/lỗi storage đã đạt; Safari thật chưa nghiệm thu.
+
 Luồng tải ảnh có bước tối ưu trước khi tạo link tải: JPEG mặc định chất lượng 92%, PNG nén lại lossless bằng CompressionStream và chỉ thay file nếu nhỏ hơn. Không giảm kích thước đã chọn; giữ alpha của PNG. Xem [chi tiết và giới hạn kiểm chứng](export-optimization.md).
 
 Nút chuyển từ Studio sang trang kết quả đã đổi thành **Hoàn tất ảnh**. Trang kết quả chuẩn bị sẵn file theo tùy chọn xuất; thời hạn xử lý 15 giây, có thử lại và loại bỏ kết quả muộn. Thông báo bắt đầu tải tự ẩn sau 4 giây. iPhone/iPad hỗ trợ chia sẻ file dùng Web Share ngay trong thao tác bấm; Android giữ tải file thông thường. Không xin quyền Photos hoặc tự lưu ảnh thay người dùng.
