@@ -52,7 +52,7 @@ npm ci
 npm run dev
 ```
 
-Mở `http://127.0.0.1:5175` theo lệnh dev trong package.json. Camera cần localhost hoặc HTTPS; truy cập từ điện thoại qua HTTP IP nội bộ có thể không mở được camera. Ảnh trong phiên sẽ mất khi reload/đóng trang.
+Mở `http://127.0.0.1:5175` theo lệnh dev trong package.json. Camera cần localhost hoặc HTTPS; truy cập từ điện thoại qua HTTP IP nội bộ có thể không mở được camera. Chỉnh sửa chưa bấm tải sẽ mất khi reload/đóng trang. Bản đã bấm tải được lưu trong [Kho ảnh](docs/saved-gallery.md) 7 ngày trên cùng trình duyệt/origin bằng IndexedDB, không gửi lên máy chủ.
 
 ```sh
 npm run verify

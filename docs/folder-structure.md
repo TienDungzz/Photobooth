@@ -60,6 +60,11 @@ Photobooth/
 │   │   └── model/
 │   │       └── photobooth-session.ts
 │   ├── features/
+│   │   ├── saved-gallery/
+│   │   │   ├── storage.ts
+│   │   │   ├── useGalleryCount.ts
+│   │   │   ├── SavedGallery.tsx
+│   │   │   └── SavedGallery.css
 │   │   ├── frame-catalog/
 │   │   │   ├── components/
 │   │   │   │   └── FrameCard/

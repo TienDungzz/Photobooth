@@ -30,7 +30,7 @@ Lệnh build thực tế là `npm run build`, output `dist/`. `npm run check:bun
 
 ## 4. Hosting, HTTPS và header
 
-Ứng dụng hiện có route `/`, `/setup`, `/setup/preview`; hosting static cần fallback cho hai route Setup. File public/_redirects cung cấp mẫu cho hosting tương thích, không rewrite asset thiếu thành HTML. Xem [Home và Setup](home-and-setup.md). E2E local dùng cổng 5197 riêng, không tái sử dụng server đang chạy.
+Ứng dụng hiện có route `/`, `/setup`, `/setup/preview`, `/gallery`; hosting static cần fallback cho các route ứng dụng này. File public/_redirects cung cấp mẫu cho hosting tương thích, không rewrite asset thiếu thành HTML. Xem [Home và Setup](home-and-setup.md) và [Kho ảnh](saved-gallery.md). Đổi domain/giao thức/cổng tạo origin mới nên không đọc được kho cũ; nên dùng địa chỉ production ổn định. E2E local dùng cổng 5197 riêng, không tái sử dụng server đang chạy.
 
 Hosting cần hỗ trợ HTTPS, security headers, cache theo loại file, atomic deploy/versioned release và rollback. Nếu ứng dụng dùng client-side routing, cấu hình fallback cho route ứng dụng; asset bị thiếu phải trả lỗi thật, không rewrite thành HTML rồi gây lỗi decode.
 

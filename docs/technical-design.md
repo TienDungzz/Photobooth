@@ -153,7 +153,7 @@ Preview và export dùng cùng tính toán hình học, cùng thứ tự lớp. 
 - Tạo thumbnail nhỏ cho khay ảnh; dùng ảnh đủ độ phân giải cho export.
 - Thu hồi object URL, đóng bitmap và bỏ canvas tạm khi ảnh hoặc phiên không còn dùng.
 - Không đưa Blob, URL ảnh tạm hoặc ảnh dạng base64 vào log và analytics.
-- Không lưu ảnh trong localStorage. Nếu thêm khôi phục phiên bằng IndexedDB, phải có thiết kế riêng về thời hạn, xóa dữ liệu và thông báo người dùng.
+- Không lưu ảnh trong cookie/localStorage. Kho ảnh dùng IndexedDB cho Blob và metadata khi bấm tải, TTL 7 ngày, hỗ trợ xem/tải/khôi phục/xóa; xem [thiết kế và vòng đời](saved-gallery.md).
 - Canvas export tạo ảnh mới; không chủ động sao chép metadata nguồn sang ảnh xuất. Cần xác minh đầu ra thực tế trước khi tuyên bố đã loại bỏ toàn bộ metadata.
 
 ## 7. Kế hoạch kiểm chứng khi có mã nguồn

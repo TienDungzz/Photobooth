@@ -12,7 +12,7 @@ Nếu thêm upload máy chủ, chia sẻ công khai, đăng nhập hoặc thanh 
 
 - Mặc định chỉ xử lý ảnh trên thiết bị. Không gửi ảnh, crop, thumbnail, tên file hoặc metadata cá nhân tới analytics, error tracker, API hay log.
 - Không thêm SDK hoặc dịch vụ có quyền đọc DOM/ảnh mà chưa đánh giá luồng dữ liệu. Network request của dependency cũng thuộc phạm vi kiểm tra.
-- Không lưu ảnh vào localStorage, IndexedDB, cache hoặc service worker trong phạm vi phiên bản đầu. Chỉ lưu các thiết lập đã được đặc tả như locale/theme.
+- Không lưu ảnh vào cookie, localStorage, cache hoặc service worker. Kho ảnh được cho phép lưu Blob và metadata chỉnh sửa trong IndexedDB khi bấm tải, thời hạn 7 ngày và xóa theo [đặc tả Kho ảnh](saved-gallery.md). Locale/theme vẫn lưu riêng như đã đặc tả. Không gửi dữ liệu kho tới máy chủ.
 - Không đặt ảnh/base64/metadata trong URL, query, fragment hoặc thông điệp lỗi. Không đưa ảnh thật của người dùng vào repository, fixture, screenshot QA hoặc báo cáo lỗi.
 - Xóa tham chiếu và giải phóng tài nguyên khi không còn dùng. “Xóa khỏi phiên” nghĩa là ứng dụng bỏ dữ liệu đang giữ; không cam kết xóa an toàn khỏi bộ nhớ thiết bị, file gốc hoặc file đã tải xuống.
 - Chỉ hiển thị cam kết “xử lý trên thiết bị” sau khi kiểm tra network của upload, camera, chỉnh sửa và export trên bản production.

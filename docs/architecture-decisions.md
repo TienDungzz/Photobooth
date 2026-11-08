@@ -20,7 +20,7 @@ Tài liệu này ghi quyết định và lý do, không thay [thiết kế kỹ 
 
 ## 3. ADR-001 — Xử lý cục bộ
 
-Ảnh tải lên/chụp được giữ trong phiên trình duyệt, không upload và không yêu cầu tài khoản. Lý do: luồng sản phẩm hiện không cần đồng bộ, giảm dữ liệu cá nhân phải quản lý. Đổi lại, reload có thể mất phiên và thiết bị chịu chi phí decode/render. Nếu thêm cloud phải có quyết định mới về dữ liệu và bảo mật.
+Ảnh tải lên/chụp được giữ trong phiên trình duyệt, không upload và không yêu cầu tài khoản. Khi bấm tải ảnh thành phẩm, lưu bản chỉnh sửa cục bộ bằng IndexedDB trong 7 ngày theo [Kho ảnh](saved-gallery.md); không dùng cookie/localStorage chứa ảnh. Lý do: cho phép xem lại và khôi phục mà không cần đồng bộ hay backend. Đổi lại, chỉnh sửa chưa bấm tải mất khi reload; kho phụ thuộc origin/trình duyệt và có thể bị trình duyệt dọn sớm. Nếu thêm cloud phải có quyết định mới về dữ liệu và bảo mật.
 
 ## 4. ADR-002 — Stack ứng dụng
 
