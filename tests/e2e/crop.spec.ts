@@ -1,0 +1,50 @@
+import { expect,test } from '@playwright/test';
+import sharp from 'sharp';
+
+test('clicking a photo opens one editing popup with crop preview and draft controls',async({page},info)=>{
+  await page.goto('/setup');
+  if(info.project.name==='mobile'){
+    await page.getByRole('button',{name:'Thiết lập',exact:true}).click();
+    await page.getByRole('button',{name:'Tối',exact:true}).click();
+    await page.getByRole('button',{name:'Đóng',exact:true}).click();
+  }
+  await page.getByRole('button',{name:'Chọn bố cục: Chân dung · 1 ảnh',exact:true}).click();
+  const buffer=await sharp(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="800" height="1000" fill="#90b2b8"/><rect x="400" width="400" height="1000" fill="#d8aa77"/><circle cx="280" cy="300" r="160" fill="#8a3455"/></svg>')).png().toBuffer();
+  await page.getByLabel('Tải ảnh từ thiết bị',{exact:true}).setInputFiles({name:'crop-test.png',mimeType:'image/png',buffer});
+  const zoom=page.getByRole('slider',{name:'Thu phóng',exact:true});
+  const open=page.locator('.studio__slot').first();
+  await open.click();
+  const dialog=page.getByRole('dialog',{name:"Chỉnh sửa ảnh",exact:true});
+  await dialog.getByRole('slider',{name:'Thu phóng',exact:true}).fill('1.8');
+  await dialog.getByRole('button',{name:'Hủy',exact:true}).click();
+  await expect(open).toBeFocused();
+  await open.click();
+  await expect(zoom).toHaveValue('1');
+  await dialog.getByRole('button',{name:'Phóng to',exact:true}).click();
+  await expect(dialog.getByRole('slider')).toHaveValue('1.1');
+  await dialog.getByRole('slider').fill('1.8');
+  const canvas=dialog.locator('canvas');
+  const before=await canvas.evaluate((e:HTMLCanvasElement)=>e.toDataURL());
+  const box=(await canvas.boundingBox())!;
+  await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();
+  await page.mouse.move(box.x+box.width/2+35,box.y+box.height/2+20,{steps:4});await page.mouse.up();
+  await expect.poll(()=>canvas.evaluate((e:HTMLCanvasElement)=>e.toDataURL())).not.toBe(before);
+  const after=await canvas.evaluate((e:HTMLCanvasElement)=>e.toDataURL());
+  const ratio=await canvas.evaluate(e=>e.getBoundingClientRect().width/e.getBoundingClientRect().height);
+  expect(ratio).toBeCloseTo(box.width/box.height,2);
+  await page.screenshot({path:`test-results/crop-dialog-${info.project.name}.png`});
+  await dialog.getByRole('button',{name:'Áp dụng',exact:true}).click();
+  await open.click();
+  await expect(zoom).toHaveValue('1.8');
+  await expect.poll(()=>canvas.evaluate((e:HTMLCanvasElement)=>e.toDataURL())).toBe(after);
+  await page.keyboard.press('Escape');
+  await expect(open).toBeFocused();
+  await expect(page.locator('.studio__edit-slot')).toHaveCount(0);
+  await expect(page.locator('.studio__sidebar').getByRole('slider')).toHaveCount(0);
+  await open.click();
+  await expect(page.getByRole('dialog')).toHaveCount(1);
+  await expect(dialog.locator('canvas')).toBeVisible();
+  await expect(dialog.getByRole('button',{name:"Đổi với ô trước",exact:true})).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});

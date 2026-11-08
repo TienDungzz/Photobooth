@@ -1,0 +1,34 @@
+import {expect,test} from '@playwright/test';
+import sharp from 'sharp';
+
+test('duplicate images share one tray entry while slots retain independent crops',async({page})=>{
+  await page.goto('/setup');
+  await page.getByRole('button',{name:'Chọn bố cục: Bốn mùa bên nhau · 4 ảnh',exact:true}).click();
+  const buffer=await sharp({create:{width:800,height:1000,channels:3,background:'#deaa77'}}).png().toBuffer();
+  const input=page.getByLabel('Tải ảnh từ thiết bị',{exact:true});
+  await input.setInputFiles([{name:'same.png',mimeType:'image/png',buffer},{name:'renamed.png',mimeType:'image/png',buffer}]);
+  await expect(page.getByText('2/4 ảnh đã chọn',{exact:true})).toBeVisible();
+  await expect(page.locator('.photo-tray__items img')).toHaveCount(1);
+  await input.setInputFiles({name:'again.png',mimeType:'image/png',buffer});
+  await expect(page.getByText('3/4 ảnh đã chọn',{exact:true})).toBeVisible();
+  await expect(page.locator('.photo-tray__items img')).toHaveCount(1);
+  await page.locator('.studio__slot').nth(1).click();
+  await page.getByRole('slider',{name:'Thu phóng',exact:true}).fill('1.6');
+  await page.getByRole('button',{name:'Áp dụng',exact:true}).click();
+  await page.locator('.studio__slot').first().click();
+  await expect(page.getByRole('slider',{name:'Thu phóng',exact:true})).toHaveValue('1');
+  await page.getByRole('button',{name:'Bỏ ảnh khỏi ô',exact:true}).click();
+  await expect(page.getByText('2/4 ảnh đã chọn',{exact:true})).toBeVisible();
+  expect(await page.locator('.photo-tray__items img').first().evaluate((image:HTMLImageElement)=>image.naturalWidth)).toBeGreaterThan(0);
+  await page.locator('.studio__slot').first().click();
+  await page.locator('.photo-tray__pick').first().click();
+  await expect(page.getByText('3/4 ảnh đã chọn',{exact:true})).toBeVisible();
+  const different=await sharp({create:{width:800,height:1000,channels:3,background:'#88bbaa'}}).png().toBuffer();
+  await input.setInputFiles({name:'same.png',mimeType:'image/png',buffer:different});
+  await expect(page.locator('.photo-tray__items img')).toHaveCount(2);
+  await expect(page.getByRole('button',{name:'Xem thành phẩm',exact:true})).toBeEnabled();
+  await page.getByRole('button',{name:'Xóa ảnh 1',exact:true}).click();
+  await page.getByRole('alertdialog').getByRole('button',{name:'Xóa ảnh',exact:true}).click();
+  await expect(page.locator('.photo-tray__items img')).toHaveCount(1);
+  await expect(page.getByText('1/4 ảnh đã chọn',{exact:true})).toBeVisible();
+});

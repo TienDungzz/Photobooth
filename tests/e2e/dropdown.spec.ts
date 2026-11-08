@@ -1,0 +1,41 @@
+import { test, expect } from '@playwright/test';
+import { chooseFilter } from './helpers/filter-dropdown';
+
+test('three custom filters support keyboard typeahead, cancellation and an unclipped popup', async ({ page }, info) => {
+  await page.goto('/setup');
+  await expect(page.locator('.design-picker select')).toHaveCount(0);
+  await expect(page.locator('.design-picker').getByRole('combobox')).toHaveCount(3);
+  const count = page.getByRole('combobox', { name: 'Số ảnh', exact: true });
+  await count.focus();
+  await count.press('2'); await count.press('0');
+  await expect(page.getByRole('listbox', { name: 'Số ảnh', exact: true })).toBeVisible();
+  const last = page.getByRole('option', { name: '20 ảnh', exact: true });
+  await expect(count).toHaveAttribute('aria-activedescendant', (await last.getAttribute('id'))!);
+  await count.press('Escape');
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await expect(count).toHaveText('Tất cả số ảnh');
+  await count.press('2'); await count.press('0'); await count.press('Enter');
+  await expect(count).toHaveText('20 ảnh');
+  await expect(page.getByRole('button', { name: /^Chọn bố cục:/ })).toHaveCount(1);
+  await count.press('ArrowDown'); await count.press('Home'); await count.press('ArrowDown'); await count.press('Enter');
+  await expect(count).toHaveText('1 ảnh');
+  await chooseFilter(page, 'Bộ sưu tập', 'Bộ thiết kế nổi bật');
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(13);
+  await page.locator('.design-picker__section').nth(1).getByRole('button', { name: 'Xóa bộ lọc', exact: true }).click();
+  await expect(count).toHaveText('Tất cả số ảnh');
+  await expect(page.getByRole('button', { name: /^Chọn mẫu frame:/ })).toHaveCount(13);
+  const style = page.getByRole('combobox', { name: 'Phong cách bố cục', exact: true });
+  await style.focus(); await style.press('p'); await style.press('h'); await style.press('a'); await style.press('Enter');
+  await expect(style).toHaveText('Phá cách');
+  await count.click();
+  const bounds = await page.getByRole('listbox', { name: 'Số ảnh', exact: true }).evaluate((element) => {
+    const box = element.getBoundingClientRect();
+    return { left: box.left, right: box.right, top: box.top, bottom: box.bottom, width: innerWidth, height: innerHeight };
+  });
+  expect(bounds.left).toBeGreaterThanOrEqual(0); expect(bounds.top).toBeGreaterThanOrEqual(0);
+  expect(bounds.right).toBeLessThanOrEqual(bounds.width); expect(bounds.bottom).toBeLessThanOrEqual(bounds.height);
+  await page.screenshot({ path: `test-results/custom-dropdown-${info.project.name}.png` });
+  await page.locator('.header__language').focus();
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await expect(page.locator('.header__language')).toBeFocused();
+});
