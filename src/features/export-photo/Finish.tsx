@@ -1,11 +1,10 @@
-import { loadArtwork } from '../../engine/artwork';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { ArrowLeft, Download, ExternalLink, Flower2, RotateCcw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Composition, Design, Photo } from '../../domain/types';
 import { FrameCanvas } from '../frame-preview';
-import { renderComposition } from '../../engine/renderer';
-import { optimizedExport } from './optimize';
+
+import { usePreparedExport } from './usePreparedExport';
 
 export function Finish({
   frame,
@@ -24,58 +23,65 @@ export function Finish({
   const [format, setFormat] = useState<'png' | 'jpeg'>('jpeg');
   const [size, setSize] = useState(2400);
   const [transparent, setTransparent] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [retry, setRetry] = useState(0);
   const [message, setMessage] = useState('');
-  const [result, setResult] = useState('');
-  const url = useRef('');
+  const request = useMemo(
+    () => ({ frame, photos, composition, format, size, transparent, retry }),
+    [frame, photos, composition, format, size, transparent, retry],
+  );
+  const { file, url: result, error, busy } = usePreparedExport(request);
+  const sharing = useRef(false);
   const alive = useRef(true);
-  const locked = useRef(false);
   useEffect(() => {
     alive.current = true;
     return () => {
       alive.current = false;
-      if (url.current) URL.revokeObjectURL(url.current);
     };
   }, []);
-  const download = async () => {
-    if (locked.current) return;
-    locked.current = true;
-    setBusy(true);
+  useEffect(() => {
     setMessage('');
-    try {
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-      const [artwork] = await Promise.all([loadArtwork(frame), document.fonts.ready]);
-      const canvas = document.createElement('canvas');
-      renderComposition(canvas, frame, photos, composition, {
-        artwork,
-        width: Math.round(
-          (size * frame.layout.width) / Math.max(frame.layout.width, frame.layout.height),
-        ),
-        height: Math.round(
-          (size * frame.layout.height) / Math.max(frame.layout.width, frame.layout.height),
-        ),
-        transparent: format === 'png' && transparent,
-      });
-      const blob = await optimizedExport(canvas, format);
-      canvas.width = 0;
-      canvas.height = 0;
-      if (!alive.current) return;
-      if (url.current) URL.revokeObjectURL(url.current);
-      url.current = URL.createObjectURL(blob);
-      setResult(url.current);
-      const anchor = document.createElement('a');
-      anchor.href = url.current;
-      anchor.download = `photobooth-${frame.id}.${format === 'png' ? 'png' : 'jpg'}`;
-      document.body.append(anchor);
-      anchor.click();
-      anchor.remove();
-      setMessage('downloaded');
-    } catch {
-      if (alive.current) setMessage('error.export');
-    } finally {
-      locked.current = false;
-      if (alive.current) setBusy(false);
+  }, [request]);
+  useEffect(() => {
+    if (!message) return;
+    const timer = window.setTimeout(() => setMessage(''), 4000);
+    return () => clearTimeout(timer);
+  }, [message]);
+  const download = () => {
+    if (busy || sharing.current) return;
+    if (!file || !result) {
+      setRetry((value) => value + 1);
+      return;
     }
+    setMessage('');
+    const isAppleMobile =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isAppleMobile && navigator.share && navigator.canShare?.({ files: [file] })) {
+      sharing.current = true;
+      try {
+        // No await before share: preserve the click's transient user activation.
+        void navigator
+          .share({ files: [file] })
+          .catch((cause: unknown) => {
+            if (alive.current && !(cause instanceof DOMException && cause.name === 'AbortError'))
+              setMessage('error.share');
+          })
+          .finally(() => {
+            sharing.current = false;
+          });
+      } catch {
+        sharing.current = false;
+        setMessage('error.share');
+      }
+      return;
+    }
+    const anchor = document.createElement('a');
+    anchor.href = result;
+    anchor.download = file.name;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    setMessage('downloaded');
   };
   return (
     <section
@@ -143,14 +149,14 @@ export function Finish({
             disabled={busy}
           >
             <Download size={18} />
-            {t(busy ? 'optimizingExport' : 'download')}
+            {t(busy ? 'optimizingExport' : error ? 'retryExport' : 'download')}
           </button>
-          {message && (
+          {(error || message) && (
             <p
-              className={`notice${message.startsWith('error') ? ' notice--error' : ''}`}
+              className={`notice${(error || message).startsWith('error') ? ' notice--error' : ''}`}
               role="status"
             >
-              {t(message)}
+              {t(error || message)}
             </p>
           )}
           {result && (
