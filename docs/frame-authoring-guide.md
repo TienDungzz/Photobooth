@@ -1,14 +1,20 @@
 # Hướng dẫn tạo layout và frame
 
+Nhóm mới nhất nằm trong `occasion-catalog.ts`: 3 bộ artwork và 4 layout riêng. Chất liệu/viền theo frame ở `engine/occasion-decoration.ts`; cuống vé ở `engine/ticket-treatment.ts`. Khi dùng `treatment: 'ticket'`, phải tính cả phần giấy và cuống 24% chiều rộng ô vào vùng an toàn sau xoay. Xem [occasion designs](occasion-designs.md).
+
 ## 1. Phân biệt và nguồn dữ liệu
 
-Layout quy định hình học các ô; frame tham chiếu layout và bổ sung trang trí; biến thể màu không tạo layout mới. Kiểu dữ liệu chuẩn nằm tại [thiết kế kỹ thuật](technical-design.md). Vị trí file theo [cấu trúc thư mục](folder-structure.md); không tạo mô hình riêng trong component.
+Mức chất lượng cần hướng tới được phân tích tại [đánh giá thư mục example](reference-design-review.md). Không dùng việc nhân màu, lặp motif hoặc sinh thêm lưới để thay thế artwork có concept, typography, mask/viền và thứ tự lớp được duyệt.
 
-Metadata nằm ở `src/features/frame-catalog/data/layouts/` và `frames/`, được đăng ký qua `catalog.ts`. Asset nằm ở `public/frames/<frame-id>/`. ID dùng kebab-case, duy nhất và ổn định; tên hiển thị/tags có bản dịch, ID không dịch.
+Layout quy định hình học các ô; frame là mẫu trang trí độc lập, không tham chiếu một layout cố định. Thành phẩm kết hợp frame/layout do người dùng chọn. Biến thể màu không tạo layout mới. Xem [frame và layout](frame-layout-selection.md). Kiểu dữ liệu chuẩn nằm tại [thiết kế kỹ thuật](technical-design.md). Vị trí file theo [cấu trúc thư mục](folder-structure.md); không tạo mô hình riêng trong component.
+
+Catalog được ghép tại `src/features/frame-catalog/catalog.ts`; 7 bộ artwork, 1 cinema Canvas và 12 layout có hình dạng riêng nằm trong `art-frames.ts`. Schema hiện tại hỗ trợ `Frame.artwork` với theme, atlas tùy chọn, title/subtitle; atlas tại `public/artwork/`, nguồn PNG tại `artwork-source/`. Các bộ mới có công thức đặt sticker riêng trong `src/engine/artwork-recipes.ts` và chất liệu nền tại `artwork.ts`. Quy trình nguồn, prompt và nén ảnh được ghi tại [artwork provenance](artwork-provenance.md). Bộ procedural cũ giữ nguyên. ID dùng kebab-case, duy nhất và ổn định; tên hiển thị có bản dịch, ID không dịch.
+
+Ba bộ artwork và sáu layout phá cách bổ sung nằm trong `expressive-catalog.ts`; chất liệu nền tại `engine/expressive-paper.ts`, lớp giấy/cửa sổ tại `engine/slot-treatment.ts`. `Slot.treatment` thuộc hình học layout; đưa nó vào khóa so sánh khi rà trùng để không đánh đồng ô thường với cửa sổ/Polaroid có cùng tọa độ. Xem [hợp đồng dựng ảnh phá cách](expressive-designs.md).
 
 ## 2. Quy trình tác giả
 
-1. Chọn nhóm bố cục và số ô; kiểm tra catalog để tái sử dụng layout phù hợp.
+1. Xác định đang thêm frame trang trí hay layout hình học; mỗi loại đăng ký riêng trong catalog.
 2. Vẽ artboard theo kích thước đầu ra, xác định các ô và vùng trang trí.
 3. Chuyển hình học sang tọa độ chuẩn hóa; khai báo slot ID, mask, rotation, required và zIndex.
 4. Xuất background/overlay nếu cần; tạo metadata frame và bản dịch.
@@ -17,6 +23,10 @@ Metadata nằm ở `src/features/frame-catalog/data/layouts/` và `frames/`, đ�
 7. Ghi nguồn/quyền sử dụng và kết quả QA trước khi đưa vào bộ phát hành.
 
 ## 3. Hình học và vùng an toàn
+
+Các layout tự sinh `ellipse-*` hiện là **ô tròn** (tên hiển thị Tròn/Circle), giữ ID ổn định. Tính đường kính theo pixel trong vùng an toàn rồi mới chia cho kích thước canvas để lấy tọa độ chuẩn hóa; không dùng cùng tỷ lệ width/height chuẩn hóa để suy ra hình tròn trên canvas chữ nhật. Mọi ô trong cùng layout có cùng đường kính, hàng cuối ít ô được căn giữa và khoảng cách ngang/dọc dùng cùng đơn vị pixel. Preview, thumbnail và PNG phải giữ đường kính ngang/dọc bằng nhau, cho phép sai số raster tối đa 2 px. Hai layout oval chân dung có chủ ý (`oval`, `oval-trio`) giữ tỷ lệ rộng/cao khoảng 0.78; không kéo ô bầu dục để lấp đầy diện tích lưới.
+
+Các layout tim/sao/vòm trong `art-frames.ts` được dựng bằng tọa độ pixel riêng rồi chuẩn hóa, không đổ cùng công thức lưới cho mọi hình. Tim và sao có ô bao vuông trong ảnh xuất; cặp ảnh dùng strip 1100×2400, bộ bốn dùng 1800×2200. Hai vòm dùng tờ ngang 2200×1600, ba vòm dùng 2400×1600; ô vòm có tỷ lệ rộng/cao 0.775–0.8 và đỉnh bán nguyệt. Unit test chặn việc vô tình ép bẹt hoặc kéo dài các hình này. Thay đổi hình học phải kiểm tra cả thumbnail và thành phẩm, không chỉnh riêng thumbnail để che lỗi layout.
 
 - `x`, `y` là góc trên trái của slot chưa xoay, chia cho kích thước artboard tương ứng. `width`, `height` là tỷ lệ artboard; xoay theo độ quanh tâm slot.
 - Ví dụ artboard 1200×2400 px, ô tại (120, 240), rộng 960, cao 480: x=0.1, y=0.1, width=0.8, height=0.2.
@@ -38,11 +48,11 @@ Nếu thiết kế cần họa tiết xen giữa ảnh, mô hình background/ove
 
 ## 5. Checklist metadata và bản quyền
 
-- Layout/frame ID duy nhất, layoutId hợp lệ, version nguyên dương, kích thước hợp lệ.
+- Layout/frame ID duy nhất trong từng danh mục, version và kích thước hợp lệ; frame không có layoutId bắt buộc. Kiểm tra tổ hợp frame/layout được công bố hỗ trợ.
 - Có tên, category, tags, thumbnail, backgroundColor, jpegBackgroundColor và allowTransparency; asset tùy chọn chỉ khai báo khi tồn tại.
 - URL dùng literal cùng origin khi có thể; nếu tạo động phải ghi ngoại lệ chính xác có lý do trong checker asset.
 - Khóa dịch cho tên/category/tags có đủ Việt/Anh; chữ nằm trong ảnh không tự dịch. Biến thể có chữ khác ngôn ngữ cần tài nguyên và liên kết lựa chọn được thiết kế riêng.
-- Ghi nguồn và quyền sử dụng vào `docs/frame-assets-register.md` khi thêm bộ asset đầu tiên: frame ID, tác giả/nguồn, giấy phép hoặc bằng chứng được phép dùng, yêu cầu ghi công, file liên quan. File sổ này chưa được tạo vì chưa có asset.
+- Ghi nguồn, phương thức tạo, quyền sử dụng và file liên quan vào [sổ tài nguyên](frame-assets-register.md). Các atlas hiện tại được tạo bằng ImageGen; không coi ảnh trong `example/` là asset có thể xuất bản.
 - Không dùng ảnh cá nhân chưa được phép cho thumbnail/fixture; ưu tiên ảnh tổng hợp hoặc ảnh có quyền sử dụng.
 
 ## 6. Kiểm tra trước khi phát hành
