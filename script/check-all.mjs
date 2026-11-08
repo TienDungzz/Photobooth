@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 let failed = false;
-for (const name of ['check-code.mjs', 'check-unused-assets.mjs', 'check-performance.mjs']) {
+for (const name of ['check-code.mjs', 'check-unused-assets.mjs', 'check-performance.mjs', 'check-i18n.mjs']) {
   const result = spawnSync(process.execPath, [fileURLToPath(new URL(name, import.meta.url)), ...process.argv.slice(2)], { stdio: 'inherit' });
   if (result.error) console.error(result.error.message);
   if (result.error || result.status !== 0) failed = true;
