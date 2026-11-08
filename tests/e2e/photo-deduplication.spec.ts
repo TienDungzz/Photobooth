@@ -26,7 +26,7 @@ test('duplicate images share one tray entry while slots retain independent crops
   const different=await sharp({create:{width:800,height:1000,channels:3,background:'#88bbaa'}}).png().toBuffer();
   await input.setInputFiles({name:'same.png',mimeType:'image/png',buffer:different});
   await expect(page.locator('.photo-tray__items img')).toHaveCount(2);
-  await expect(page.getByRole('button',{name:'Xem thành phẩm',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Hoàn tất ảnh',exact:true})).toBeEnabled();
   await page.getByRole('button',{name:'Xóa ảnh 1',exact:true}).click();
   await page.getByRole('alertdialog').getByRole('button',{name:'Xóa ảnh',exact:true}).click();
   await expect(page.locator('.photo-tray__items img')).toHaveCount(1);

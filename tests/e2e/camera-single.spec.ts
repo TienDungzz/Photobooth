@@ -17,8 +17,8 @@ test('camera defaults to one shot even when the layout has multiple empty slots'
   };
   await takeOne();
   await expect(page.locator('.photo-tray__items img')).toHaveCount(1);
-  await expect(page.getByRole('button',{name:'Xem thành phẩm',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button',{name:'Hoàn tất ảnh',exact:true})).toBeDisabled();
   await takeOne();
   await expect(page.locator('.photo-tray__items img')).toHaveCount(2);
-  await expect(page.getByRole('button',{name:'Xem thành phẩm',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Hoàn tất ảnh',exact:true})).toBeEnabled();
 });

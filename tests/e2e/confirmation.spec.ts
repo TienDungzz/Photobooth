@@ -17,7 +17,7 @@ test('custom confirmations cancel safely and only remove photos or reset after a
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
   await expect(remove).toBeFocused();
-  await expect(page.getByRole('button',{name:'Xem thành phẩm',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Hoàn tất ảnh',exact:true})).toBeEnabled();
   await remove.click();
   await dialog.getByRole('button',{name:'Hủy',exact:true}).click();
   await expect(remove).toBeVisible();
@@ -26,9 +26,9 @@ test('custom confirmations cancel safely and only remove photos or reset after a
   await dialog.getByRole('button',{name:'Xóa ảnh',exact:true}).click();
   await expect(remove).toHaveCount(0);
   await expect(page.locator('.photo-tray')).toBeFocused();
-  await expect(page.getByRole('button',{name:'Xem thành phẩm',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button',{name:'Hoàn tất ảnh',exact:true})).toBeDisabled();
   await upload();
-  await page.getByRole('button',{name:'Xem thành phẩm',exact:true}).click();
+  await page.getByRole('button',{name:'Hoàn tất ảnh',exact:true}).click();
   await page.getByRole('button',{name:'Tạo kỷ niệm mới',exact:true}).click();
   const reset=page.getByRole('alertdialog',{name:'Tạo kỷ niệm mới',exact:true});
   await reset.getByRole('button',{name:'Hủy',exact:true}).click();
@@ -37,6 +37,6 @@ test('custom confirmations cancel safely and only remove photos or reset after a
   await reset.getByRole('button',{name:'Bắt đầu phiên mới',exact:true}).click();
   await expect(page).toHaveURL(/\/setup$/);
   await expect(page.locator('.photo-tray__items img')).toHaveCount(0);
-  await expect(page.getByRole('button',{name:'Xem thành phẩm',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button',{name:'Hoàn tất ảnh',exact:true})).toBeDisabled();
   expect(nativeDialogs).toEqual([]);
 });

@@ -90,7 +90,7 @@ test('upload, crop and export PNG/JPEG without network photo uploads', async ({
   await page.getByRole('button', { name: 'Chọn bố cục: Chân dung · 1 ảnh', exact: true }).click();
 
   await page.getByLabel('Tải ảnh từ thiết bị', { exact: true }).setInputFiles(file);
-  await expect(page.getByRole('button', { name: 'Xem thành phẩm', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeEnabled();
   await openSlotTools(page);
   await page.getByRole('slider', { name: 'Thu phóng', exact: true }).fill('1.5');
   await closeSlotTools(page);
@@ -105,7 +105,7 @@ test('upload, crop and export PNG/JPEG without network photo uploads', async ({
   await page.getByRole('button', { name: 'Xoay 90°', exact: true }).click();
   await closeSlotTools(page);
   await page.screenshot({ path: `test-results/editor-${testInfo.project.name}.png` });
-  await page.getByRole('button', { name: 'Xem thành phẩm', exact: true }).click();
+  await page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true }).click();
   await expect(page.locator('.finish__preview canvas')).toHaveAttribute('data-render-state', 'ready');
   await page.screenshot({ path: `test-results/finish-${testInfo.project.name}.png` });
   await page.locator('.finish select').first().selectOption('png');
@@ -143,7 +143,7 @@ test('rejects unsupported content without losing a valid photo', async ({ page }
       exact: true,
     }),
   ).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Xem thành phẩm', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeEnabled();
 });
 
 test('changing layout preserves decoration and photo tray', async ({ page }) => {
@@ -152,14 +152,14 @@ test('changing layout preserves decoration and photo tray', async ({ page }) => 
   await page.getByRole('button', { name: 'Chọn mẫu frame: Ruy băng & ren', exact: true }).click();
 
   await page.getByLabel('Tải ảnh từ thiết bị', { exact: true }).setInputFiles(file);
-  await expect(page.getByRole('button', { name: 'Xem thành phẩm', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeEnabled();
   await page
     .getByRole('button', { name: 'Chọn bố cục: Ba nhịp yêu thương · 3 ảnh', exact: true })
     .click();
   await expect(
     page.getByRole('button', { name: 'Chọn mẫu frame: Ruy băng & ren', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('button', { name: 'Xem thành phẩm', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeDisabled();
   await expect(page.locator('.photo-tray__item')).toHaveCount(1);
   await expect(page.getByText('Còn thiếu 2 ảnh', { exact: true })).toBeVisible();
 });

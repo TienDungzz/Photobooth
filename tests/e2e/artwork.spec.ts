@@ -95,7 +95,7 @@ test('shape filters, independent artwork selection and a real PNG download', asy
   await openSlotTools(page);
   await expect(page.getByRole('slider', { name: 'Thu phóng', exact: true })).toHaveValue('1.4');
   await closeSlotTools(page);
-  await page.getByRole('button', { name: 'Xem thành phẩm', exact: true }).click();
+  await page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true }).click();
   await expect(page.locator('.finish__preview canvas')).toHaveAttribute('data-render-state', 'ready');
   await page.locator('.finish select').first().selectOption('png');
   const downloaded = page.waitForEvent('download');

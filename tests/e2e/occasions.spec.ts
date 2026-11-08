@@ -88,7 +88,7 @@ test('ticket layout exports a visible stub and keeps crops when changing occasio
   await openSlotTools(page);
   await expect(page.getByRole('slider', { name: 'Thu phóng', exact: true })).toHaveValue('1.25');
   await closeSlotTools(page);
-  await page.getByRole('button', { name: 'Xem thành phẩm', exact: true }).click();
+  await page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true }).click();
   await expect(page.locator('.finish__preview canvas')).toHaveAttribute(
     'data-render-state',
     'ready',

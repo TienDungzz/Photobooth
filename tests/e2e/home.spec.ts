@@ -35,5 +35,5 @@ test('home promotes the photobooth and opens a separate setup page', async ({ pa
 test('direct preview without session photos returns to setup', async ({ page }) => {
   await page.goto('/setup/preview');
   await expect(page).toHaveURL(/\/setup$/);
-  await expect(page.getByRole('button', { name: 'Xem thành phẩm', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Hoàn tất ảnh', exact: true })).toBeDisabled();
 });
