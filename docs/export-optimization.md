@@ -7,6 +7,16 @@
 - Trình duyệt thiếu API nén hoặc nén PNG thất bại sẽ tải bản PNG gốc hợp lệ. Không đổi đuôi file hoặc MIME để che việc đổi định dạng.
 - Nút tải khóa trong suốt quá trình tạo và tối ưu ảnh. Canvas xuất được giải phóng sau khi tạo Blob; URL kết quả được thu hồi khi thay file hoặc rời trang.
 
+## Chuẩn bị file, timeout và iPhone
+
+Trang thành phẩm tự chuẩn bị file theo định dạng, kích thước và nền đang chọn. Đổi lựa chọn hoặc rời trang hủy quyền cập nhật của tác vụ cũ, thu hồi URL cũ và giải phóng canvas. Sau 15 giây, hiển thị lỗi riêng, mở khóa điều khiển và cho phép thử lại hoặc giảm kích thước. Kết quả trả về muộn không được ghi đè lỗi hay tự tải file. Timer không thể ngắt JavaScript đồng bộ đang chặn main thread; kiểm tra thời hạn tại các điểm tiếp tục giúp loại bỏ kết quả quá hạn khi luồng chạy trở lại.
+
+Trên iPhone/iPad hỗ trợ `navigator.canShare({files})`, nút tải gọi `navigator.share` ngay trong thao tác bấm với file ảnh đã chuẩn bị, tránh mất user activation do chờ render. iOS quyết định các hành động lưu/chia sẻ; website không thể tự lưu vào Photos hoặc bỏ mọi xác nhận hệ thống. Hủy bảng chia sẻ không hiện lỗi. Nếu chia sẻ thất bại, có thể thử lại hoặc dùng liên kết mở ảnh. Trình duyệt không hỗ trợ chia sẻ file giữ cách tải bằng thuộc tính `download`.
+
+Trạng thái tạo/tối ưu kết thúc khi file sẵn sàng, không chờ bảng chia sẻ của hệ điều hành. Thông báo bắt đầu tải tự ẩn sau 4 giây; đây không phải xác nhận file đã được hệ điều hành lưu thành công. Timeout 15 giây chỉ áp dụng xử lý ảnh, không giới hạn thời gian người dùng thao tác trong bảng chia sẻ.
+
+`tests/e2e/export-lifecycle.spec.ts` kiểm tra encoder bị treo, retry và callback muộn, chia sẻ file với user activation, hủy chia sẻ và thông báo tải tự ẩn. Web Share được mô phỏng trong Chromium; vẫn cần nghiệm thu bảng lưu ảnh trên iPhone thật.
+
 JPEG có nén mất dữ liệu nhẹ nên không cam kết giống từng pixel. Người cần bản không mất dữ liệu hoặc nền trong suốt có thể chọn PNG. Không cam kết một mức dung lượng cố định: ảnh nhiều chi tiết và nhiễu sẽ khó nén hơn ảnh nền phẳng.
 
 ## Kiểm chứng

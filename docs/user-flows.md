@@ -13,7 +13,7 @@ Mỗi bước có đường truy cập thiết lập ngôn ngữ và giao diện
 | Home | Banner, bộ sưu tập minh họa, hướng dẫn và CTA | Mở Setup |
 | Setup | Frame/layout trái, preview giữa, nguồn ảnh/khay/công cụ phải | Chọn thiết kế, tải ảnh hoặc mở camera |
 | Chụp ảnh | Camera preview, thiết lập thời gian/số tấm, tiến độ | Chụp, hủy, dùng ảnh |
-| Xem thành phẩm | Bản dựng cuối, định dạng và kích thước | Tải về hoặc quay lại chỉnh |
+| Hoàn tất ảnh | Bản dựng cuối, định dạng và kích thước | Tải về hoặc quay lại chỉnh |
 
 Trên điện thoại, ưu tiên một vùng thao tác chính mỗi bước. Trên desktop có thể đặt khay ảnh và công cụ bên cạnh preview. Camera preview phải thể hiện vùng crop của ô sẽ nhận ảnh khi có thể.
 
@@ -26,7 +26,11 @@ Trong Setup, chọn mẫu frame trang trí và layout tại hai panel riêng bê
 3. Ứng dụng kiểm tra từng file; hiển thị ảnh hợp lệ và lỗi riêng cho file không đọc được.
 4. Ảnh được gán lần lượt vào ô trống. Ảnh dư nằm trong khay.
 5. Người dùng chọn từng ô để di chuyển, zoom, xoay hoặc thay ảnh.
-6. Khi đủ ô, chọn “Xem thành phẩm”, chọn PNG/JPEG và tải xuống.
+6. Khi đủ ô, chọn “Hoàn tất ảnh” để sang trang kết quả; nút này chưa tải file. Chọn PNG/JPEG và kích thước, đợi ảnh sẵn sàng rồi bấm “Tải ảnh về”.
+
+Trang kết quả chuẩn bị và tối ưu file ngay khi mở hoặc thay đổi tùy chọn xuất. Nếu quá 15 giây, báo lỗi và cho thử lại/giảm kích thước; kết quả muộn không được tự tải hay thay trạng thái lỗi. Thông báo bắt đầu tải tự ẩn sau 4 giây.
+
+Trên iPhone/iPad hỗ trợ chia sẻ file, nút tải mở bảng chia sẻ hệ thống với file đã chuẩn bị; người dùng chọn lưu ảnh hoặc lưu vào Tệp nếu có. Hủy bảng chia sẻ không báo lỗi. Android và thiết bị không dùng nhánh chia sẻ Apple tiếp tục tải qua liên kết `download`. Website không thể tự lưu vào Photos hoặc xác nhận hệ điều hành đã lưu file. Xem [luồng xuất ảnh và giới hạn](export-optimization.md).
 
 Nếu chưa đủ ảnh, hiển thị “Còn thiếu N ảnh”. Nếu không có kết quả lọc frame/layout, cho phép xóa bộ lọc ngay tại panel tương ứng trong Setup.
 

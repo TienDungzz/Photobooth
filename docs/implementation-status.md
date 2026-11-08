@@ -74,6 +74,10 @@ Các docs yêu cầu/tiêu chuẩn vẫn là mục tiêu nghiệm thu. Nếu ch�
 
 Luồng tải ảnh có bước tối ưu trước khi tạo link tải: JPEG mặc định chất lượng 92%, PNG nén lại lossless bằng CompressionStream và chỉ thay file nếu nhỏ hơn. Không giảm kích thước đã chọn; giữ alpha của PNG. Xem [chi tiết và giới hạn kiểm chứng](export-optimization.md).
 
+Nút chuyển từ Studio sang trang kết quả đã đổi thành **Hoàn tất ảnh**. Trang kết quả chuẩn bị sẵn file theo tùy chọn xuất; thời hạn xử lý 15 giây, có thử lại và loại bỏ kết quả muộn. Thông báo bắt đầu tải tự ẩn sau 4 giây. iPhone/iPad hỗ trợ chia sẻ file dùng Web Share ngay trong thao tác bấm; Android giữ tải file thông thường. Không xin quyền Photos hoặc tự lưu ảnh thay người dùng.
+
+Kiểm chứng: `npm run verify` và 6 ca E2E trong `export-lifecycle.spec.ts` đã đạt trong Chromium desktop/mobile, bao gồm timeout, retry/callback muộn, user activation, hủy chia sẻ và tải dự phòng. API chia sẻ được mô phỏng; chưa nghiệm thu Safari/iPhone/Android thật. Không xem kết quả này là bằng chứng bảng hệ thống luôn có hành động “Lưu hình ảnh”.
+
 
 Kiểm chứng tối ưu export: npm run verify đạt (29 unit test, 5 checker test, build và bundle budget); 10 ca E2E export trên desktop/mobile đạt. Vẫn có 4 cảnh báo heuristic vòng đời tài nguyên đã biết. Mẫu PNG thử nghiệm giảm 57% và pixel giải mã không đổi; tỷ lệ thực tế tùy ảnh.
 

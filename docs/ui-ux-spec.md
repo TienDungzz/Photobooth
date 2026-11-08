@@ -38,7 +38,7 @@ Dải card cuộn ngang bên trong panel; layout có nhóm Tất cả, 2–3, 4�
 - Đổi thứ tự bằng chọn ảnh từ khay rồi gán ô hoặc hành động đổi vị trí có nhãn; kéo thả là tiện ích bổ sung, không phải cách duy nhất.
 - Khay thể hiện ảnh đã dùng/chưa dùng. Xóa ảnh đang dùng phải nói rõ ảnh hưởng tới các ô liên quan và cho hủy trước khi xóa.
 - Đổi frame giữ nguyên layout/crop; đổi layout giữ frame và ảnh, reset crop theo tỷ lệ mới và báo ô thiếu/ảnh dư.
-- Thiếu ô bắt buộc: vẫn giữ nút xem thành phẩm trong bố cục, hiển thị lý do chưa thể tiếp tục và hành động tới ô trống đầu tiên.
+- Thiếu ô bắt buộc: vẫn giữ nút “Hoàn tất ảnh” trong bố cục, hiển thị lý do chưa thể tiếp tục và hành động tới ô trống đầu tiên.
 
 ## 6. Camera
 
@@ -48,6 +48,7 @@ Dải card cuộn ngang bên trong panel; layout có nhóm Tất cả, 2–3, 4�
 - Paused: thông báo lý do, số ảnh đã chụp, nút tiếp tục và dừng. Tiếp tục đếm ngược lại, không chụp ngay ngoài ý muốn.
 - Reviewing: chọn dùng ảnh, bỏ ảnh hoặc chụp lại. Nếu giữ stream để chụp lại, hiển thị camera còn bật và nút đóng.
 - Camera lỗi/từ chối quyền: có thử lại khi phù hợp và chuyển sang tải ảnh. Không lặp hộp xin quyền tự động.
+- Nút “Hoàn tất ảnh” mở trang kết quả, không tải ngay. Trang kết quả khóa nút tải trong lúc chuẩn bị file; sau 15 giây báo lỗi và cho thử lại. Khi chuyển file sang trình duyệt/iOS, không giữ trạng thái đang xử lý. Thông báo bắt đầu tải tự ẩn sau 4 giây, không thông báo đã lưu vào Photos khi website không thể xác nhận.
 - Countdown cần nhìn rõ nhưng không flash bắt buộc. Screen reader thông báo bắt đầu, tấm đã chụp và kết thúc; tránh live region đọc liên tục mỗi tick gây nhiễu.
 
 ## 7. Thành phẩm và trạng thái chung
