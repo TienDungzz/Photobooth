@@ -23,6 +23,7 @@ node_modules/
 # Test output and generated reports (keep fixtures and visual baselines)
 /coverage/
 /test-results/
+/test-results-*/
 /playwright-report/
 /blob-report/
 /reports/
@@ -70,3 +71,6 @@ Thumbs.db
 Desktop.ini
 
 # Keep package-manager lockfiles, project assets and source fixtures tracked.
+
+# Local reference images
+/example/
