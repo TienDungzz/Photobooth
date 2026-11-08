@@ -50,6 +50,7 @@ export function Editor({
   const [toolsOpen, setToolsOpen] = useState(false);
   const moved = useRef(false);
   const input = useRef<HTMLInputElement>(null);
+  const uploadButton = useRef<HTMLButtonElement>(null);
   const designPanel = useRef<HTMLElement>(null);
   const [mobileTool, setMobileTool] = useState<'frame' | 'layout' | 'photos'>('photos');
   const previewPanel = useRef<HTMLDivElement>(null);
@@ -250,6 +251,7 @@ export function Editor({
               }}
             />
             <button
+              ref={uploadButton}
               className="button button--primary button--full"
               title={t('upload')}
               disabled={busy}
@@ -271,6 +273,7 @@ export function Editor({
             </button>
           </div>
           <PhotoTray
+            mobileReturnFocus={uploadButton}
             photos={photos}
             composition={composition}
             selectedNumber={frame.layout.slots.findIndex((slot) => slot.id === selected) + 1}

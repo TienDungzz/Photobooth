@@ -1,5 +1,5 @@
 import './PhotoTray.css';
-import { useRef, useState } from 'react';
+import { useRef, useState, type RefObject } from 'react';
 import { ConfirmDialog } from '../../shared/components/ConfirmDialog';
 import { Check, Images, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ export function PhotoTray({
   onPick,
   onRemove,
   disabled = false,
+  mobileReturnFocus,
 }: {
   photos: Photo[];
   composition: Composition;
@@ -20,6 +21,7 @@ export function PhotoTray({
   onPick: (id: string) => void;
   onRemove: (id: string) => void;
   disabled?: boolean;
+  mobileReturnFocus?: RefObject<HTMLElement | null>;
 }) {
   const { t } = useTranslation();
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
@@ -71,7 +73,9 @@ export function PhotoTray({
           description={t('confirmDelete')}
           confirmLabel={t('removePhoto')}
           onCancel={() => setPendingDelete(null)}
-          returnFocus={tray}
+          returnFocus={
+            matchMedia('(max-width: 700px)').matches ? (mobileReturnFocus ?? tray) : tray
+          }
           onConfirm={() => {
             onRemove(pendingDelete);
             setPendingDelete(null);
