@@ -1,11 +1,60 @@
 {
   "name": "photobooth",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "overrides": {
+    "minimatch": "^11.0.1"
+  },
   "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5175 --strictPort",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check:bundle": "node script/check-bundle-budget.mjs",
+    "check:i18n": "node script/check-i18n.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run lint:css && npm run format:check && npm run test && npm run test:checkers && npm run check && npm run build && npm run check:bundle",
     "check": "node script/check-all.mjs",
     "check:code": "node script/check-code.mjs",
     "check:assets": "node script/check-unused-assets.mjs",
     "check:performance": "node script/check-performance.mjs",
-    "test:checkers": "node --test script/tests/checkers.test.mjs"
+    "test:checkers": "node --test script/tests/checkers.test.mjs",
+    "artwork:prepare": "node script/prepare-artwork.mjs",
+    "branding:prepare": "node script/prepare-branding.mjs",
+    "catalog:review": "node script/review-catalog.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/noto-serif": "^5.3.0",
+    "i18next": "^27.0.0",
+    "lucide-react": "^1.70.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-i18next": "^18.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "prettier": "^3.9.10",
+    "sharp": "^0.35.5",
+    "stylelint": "^18.0.0",
+    "stylelint-config-standard": "^41.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^8.3.6",
+    "vitest": "^5.1.0"
   }
 }
