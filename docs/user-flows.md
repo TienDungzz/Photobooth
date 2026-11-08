@@ -2,20 +2,24 @@
 
 ## 1. Cấu trúc màn hình
 
+Luồng chính đã đổi thành Home `/` → Setup `/setup` (chọn frame/layout + tải/chụp/chỉnh ảnh trên cùng trang) → thành phẩm `/setup/preview`. Không có gallery trên Home hoặc bước gallery riêng trước editor. Xem [Home và Setup](home-and-setup.md).
+
 Bố trí theo kích thước màn hình, wireframe nội dung, gesture và focus được quy định tại [đặc tả UI/UX](ui-ux-spec.md).
 
 Mỗi bước có đường truy cập thiết lập ngôn ngữ và giao diện: Tiếng Việt/English; sáng/tối/theo hệ thống. Đổi thiết lập áp dụng ngay, giữ ảnh và trạng thái chỉnh sửa/chụp; chi tiết tại [Đa ngôn ngữ](localization.md) và [Giao diện sáng/tối](theme.md).
 
 | Màn hình | Nội dung chính | Hành động chính |
 | --- | --- | --- |
-| Chọn frame | Gallery, tìm kiếm, bộ lọc, thumbnail và số ô | Chọn frame |
-| Tạo ảnh | Preview frame, khay ảnh, nguồn ảnh, công cụ căn chỉnh | Tải ảnh hoặc mở camera |
+| Home | Banner, bộ sưu tập minh họa, hướng dẫn và CTA | Mở Setup |
+| Setup | Frame/layout trái, preview giữa, nguồn ảnh/khay/công cụ phải | Chọn thiết kế, tải ảnh hoặc mở camera |
 | Chụp ảnh | Camera preview, thiết lập thời gian/số tấm, tiến độ | Chụp, hủy, dùng ảnh |
 | Xem thành phẩm | Bản dựng cuối, định dạng và kích thước | Tải về hoặc quay lại chỉnh |
 
 Trên điện thoại, ưu tiên một vùng thao tác chính mỗi bước. Trên desktop có thể đặt khay ảnh và công cụ bên cạnh preview. Camera preview phải thể hiện vùng crop của ô sẽ nhận ảnh khi có thể.
 
 ## 2. Tải ảnh và ghép frame
+
+Trong Setup, chọn mẫu frame trang trí và layout tại hai panel riêng bên trái; preview kết hợp cập nhật ngay ở giữa. Có thể tải/chụp ảnh ngay ở cột phải, không có nút tiếp tục sang editor khác.
 
 1. Người dùng chọn frame; hiển thị số ảnh cần thêm.
 2. Chọn “Tải ảnh” và chọn một hoặc nhiều file.
@@ -24,13 +28,13 @@ Trên điện thoại, ưu tiên một vùng thao tác chính mỗi bước. Tr�
 5. Người dùng chọn từng ô để di chuyển, zoom, xoay hoặc thay ảnh.
 6. Khi đủ ô, chọn “Xem thành phẩm”, chọn PNG/JPEG và tải xuống.
 
-Nếu chưa đủ ảnh, hiển thị “Còn thiếu N ảnh” cùng đường dẫn tới ô trống. Nếu không có kết quả lọc frame, cho phép xóa bộ lọc ngay tại gallery.
+Nếu chưa đủ ảnh, hiển thị “Còn thiếu N ảnh”. Nếu không có kết quả lọc frame/layout, cho phép xóa bộ lọc ngay tại panel tương ứng trong Setup.
 
 ## 3. Chụp bằng camera
 
 1. Từ màn hình tạo ảnh, chọn “Mở camera”.
 2. Trình duyệt yêu cầu quyền; khi được cấp quyền, mở preview và chờ video sẵn sàng.
-3. Người dùng chọn camera, hẹn giờ, số tấm và khoảng nghỉ.
+3. Người dùng chọn camera, hẹn giờ, số tấm và khoảng nghỉ. Mặc định mỗi lượt chụp 1 tấm, kể cả layout còn nhiều ô trống; muốn chụp liên tiếp phải chọn số tấm lớn hơn 1. Camera hiển thị rõ số tấm sẽ chụp trong một lượt.
 4. Chọn “Bắt đầu chụp”; khóa cấu hình phiên và hiện đếm ngược.
 5. Chụp từng tấm, cập nhật “Ảnh i/N” và thumbnail; giữa các tấm hiển thị thời gian tới tấm tiếp theo.
 6. Khi đủ số tấm, mở vùng duyệt kết quả. Người dùng chọn dùng ảnh, bỏ ảnh hoặc chụp lại.
@@ -47,12 +51,12 @@ Nếu chưa đủ ảnh, hiển thị “Còn thiếu N ảnh” cùng đường
 
 Hủy hoặc lỗi camera không làm thay đổi ô đang có ảnh.
 
-## 5. Đổi frame giữa phiên
+## 5. Đổi frame hoặc layout giữa phiên
 
-1. Chọn “Đổi frame” và chọn frame khác.
-2. Giữ toàn bộ ảnh trong khay; ánh xạ ảnh đang dùng theo thứ tự ô.
-3. Căn chỉnh lại cho tỷ lệ ô mới bằng chế độ phủ kín mặc định; giữ crop cũ riêng cho frame cũ trong phiên nếu triển khai bộ nhớ chỉnh sửa.
-4. Thông báo số ô còn thiếu hoặc số ảnh dư. Không tự chụp thêm và không xóa ảnh dư.
+1. Đổi mẫu frame: chỉ cập nhật nền/viền/trang trí, giữ layout, ảnh từng ô, selected slot và toàn bộ crop.
+2. Đổi layout: giữ frame và khay ảnh; gán ảnh đang dùng theo thứ tự sang các ô mới, reset crop cho tỷ lệ mới.
+3. Ít ô hơn thì ảnh dư vẫn ở khay; nhiều ô hơn thì báo còn thiếu. Không tự chụp hoặc xóa ảnh.
+4. Đổi nhóm lọc hoặc thu gọn panel không thay lựa chọn. Xem [frame và layout](frame-layout-selection.md).
 
 ## 6. Các tình huống gián đoạn
 

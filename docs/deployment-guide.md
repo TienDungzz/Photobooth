@@ -2,9 +2,9 @@
 
 ## 1. Trạng thái
 
-Chưa có ứng dụng, lệnh build, hosting hay workflow CI/CD. Tài liệu này quy định quy trình cần thiết, không cung cấp lệnh deploy chưa tồn tại. Nhà cung cấp, thư mục output, tên biến môi trường và URL staging/production sẽ được ghi sau khi chốt [quyết định kiến trúc](architecture-decisions.md).
+Đã có ứng dụng Vite, lệnh build và workflow GitHub Actions; chưa chọn hosting/domain hoặc triển khai staging/production. Nhà cung cấp, cấu hình biến môi trường nếu cần và URL phát hành sẽ được ghi sau khi chốt [quyết định kiến trúc](architecture-decisions.md).
 
-Hiện có thể chạy `npm run check` và `npm run test:checkers`; không xem đây là build hoặc kiểm chứng deploy thành công.
+Hiện chạy `npm ci`, `npm run dev` cho local; `npm run verify` để kiểm tra và build vào `dist/`; `npm run preview` để xem bản production local. E2E: `npx playwright install chromium` rồi `npm run test:e2e`. Đây không phải lệnh publish. Chưa có biến môi trường bắt buộc cho ứng dụng hiện tại.
 
 ## 2. Môi trường và cấu hình
 
@@ -26,9 +26,11 @@ Chốt base path trước build; kiểm tra đường dẫn asset frame và alia
 4. Đóng gói output cùng manifest build/commit, cấu hình public và danh sách asset/version. Không đưa source fixture, secret hoặc file ảnh người dùng vào artifact.
 5. Triển khai cùng artifact đã kiểm tra lên staging rồi promote lên production nếu nền tảng hỗ trợ; nếu phải build lại, kiểm tra khác biệt cấu hình và tạo bằng chứng tương đương.
 
-Tên lệnh build và thư mục output phải được bổ sung vào tài liệu này khi có mã nguồn, không suy ra từ ví dụ Vite trước khi stack được chốt.
+Lệnh build thực tế là `npm run build`, output `dist/`. `npm run check:bundle` yêu cầu dist đã tồn tại. File `public/_headers` được copy vào dist như mẫu cho hosting hỗ trợ; Vite dev/preview không tự áp dụng header này. Cần cấu hình tương đương ở hosting khác và kiểm tra response thực tế.
 
 ## 4. Hosting, HTTPS và header
+
+Ứng dụng hiện có route `/`, `/setup`, `/setup/preview`; hosting static cần fallback cho hai route Setup. File public/_redirects cung cấp mẫu cho hosting tương thích, không rewrite asset thiếu thành HTML. Xem [Home và Setup](home-and-setup.md). E2E local dùng cổng 5197 riêng, không tái sử dụng server đang chạy.
 
 Hosting cần hỗ trợ HTTPS, security headers, cache theo loại file, atomic deploy/versioned release và rollback. Nếu ứng dụng dùng client-side routing, cấu hình fallback cho route ứng dụng; asset bị thiếu phải trả lỗi thật, không rewrite thành HTML rồi gây lỗi decode.
 

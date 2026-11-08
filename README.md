@@ -6,6 +6,13 @@
 
 ## Tài liệu
 
+- [Đánh giá ảnh tham khảo](docs/reference-design-review.md): khoảng cách chất lượng giữa catalog basic hiện tại và thiết kế trong thư mục example.
+
+- [Home và Setup](docs/home-and-setup.md): trang giới thiệu riêng, Studio ba cột và điều hướng phiên.
+
+- [Kho frame/layout và bộ lọc](docs/catalog-browsing.md): số lượng, họa tiết, cách duyệt và khử trùng bố cục.
+
+- [Frame và layout độc lập](docs/frame-layout-selection.md): định nghĩa đúng theo ảnh tham chiếu, giao diện chọn và quy tắc giữ ảnh/crop.
 - [Yêu cầu sản phẩm](docs/product-requirements.md): phạm vi, tính năng, tiêu chí nghiệm thu và thứ tự triển khai.
 - [Luồng trải nghiệm](docs/user-flows.md): chọn frame, tải ảnh, chụp hẹn giờ, chụp liên tiếp và xuất ảnh.
 - [Thiết kế kỹ thuật](docs/technical-design.md): mô hình dữ liệu frame, camera, xử lý ảnh và chiến lược kiểm thử.
@@ -34,6 +41,28 @@
 
 ## Trạng thái
 
-Bộ checker chạy bằng `npm run check`; chế độ chặn cả cảnh báo: `npm run check -- --strict`. Không cần cài thư viện cho các checker này. Kiểm thử checker: `npm run test:checkers`.
+Đã có ứng dụng React + TypeScript + Vite: 62 frame (13 bộ artwork minh họa, 28 mẫu procedural và 21 thiết kế Canvas trong bộ cơ bản), 93 bố cục chọn độc lập (1–20 ảnh), mask tim/sao/vòm/tem thư, tải ảnh, crop/zoom/xoay/mirror, khay ảnh, camera hẹn giờ/burst, xuất PNG/JPEG, Việt/Anh và sáng/tối/theo hệ thống. Ảnh xử lý cục bộ, không có backend lưu ảnh. Xem [trạng thái triển khai](docs/implementation-status.md) và [nguồn artwork/pipeline](docs/artwork-provenance.md). Chạy `npm run artwork:prepare` khi cần tạo lại WebP từ PNG nguồn.
 
-Repository hiện chứa tài liệu đặc tả và bộ checker trong `script/`, chưa có mã nguồn ứng dụng. Các giá trị mặc định, số lượng frame và công nghệ trong docs là đề xuất ban đầu để triển khai; không phải tính năng đã hoàn thành.
+## Chạy local
+
+Yêu cầu Node >=22.12 và npm. Tại thư mục dự án:
+
+```sh
+npm ci
+npm run dev
+```
+
+Mở `http://127.0.0.1:5175` theo lệnh dev trong package.json. Camera cần localhost hoặc HTTPS; truy cập từ điện thoại qua HTTP IP nội bộ có thể không mở được camera. Ảnh trong phiên sẽ mất khi reload/đóng trang.
+
+```sh
+npm run verify
+npx playwright install chromium
+npm run test:e2e
+npm run preview
+```
+
+`verify` chạy typecheck, ESLint, Stylelint/BEM, formatter, unit test, test checker, checker dự án, build và budget bundle. E2E dùng Chromium riêng với camera giả lập, không sử dụng camera/hồ sơ Chrome thật. `preview` phục vụ bản `dist/` sau build.
+
+`npm run check -- --strict` chặn cả cảnh báo heuristic; các điểm camera/timer/object URL hiện vẫn được cảnh báo để review, nên strict không phải cổng mặc định. Không coi build/test đạt là đã kiểm chứng Safari iOS, webcam thật hoặc budget bộ nhớ thiết bị.
+
+Ba frame Canvas v? ba b? c?c m?i: [thi?t k? to?n trang](docs/signature-designs.md).

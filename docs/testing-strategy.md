@@ -2,7 +2,7 @@
 
 ## 1. Phạm vi và trạng thái
 
-Kiểm thử theo rủi ro mất ảnh, ảnh xuất sai, chụp ngoài ý muốn, rò rỉ dữ liệu và lỗi trên điện thoại. Hiện chỉ có 5 bài kiểm thử bộ checker trong `script/tests/checkers.test.mjs`; chưa có test ứng dụng. Dùng [yêu cầu sản phẩm](product-requirements.md) làm nguồn tiêu chí, không xem danh sách dưới đây là kết quả đã đạt.
+Kiểm thử theo rủi ro mất ảnh, ảnh xuất sai, chụp ngoài ý muốn, rò rỉ dữ liệu và lỗi trên điện thoại. Đã có test checker Node, unit test Vitest và E2E Playwright Chromium; phạm vi thực tế theo [trạng thái triển khai](implementation-status.md). Dùng [yêu cầu sản phẩm](product-requirements.md) làm nguồn tiêu chí, không xem danh sách mục tiêu dưới đây là mọi trường hợp đã đạt.
 
 ## 2. Các lớp kiểm thử
 
@@ -17,6 +17,8 @@ Kiểm thử theo rủi ro mất ảnh, ảnh xuất sai, chụp ngoài ý muố
 Không đặt mục tiêu coverage phần trăm thay cho hành vi. Ưu tiên test logic và các trạng thái hỏng; tránh test chỉ xác nhận tên hàm/class hoặc chi tiết triển khai có thể thay đổi.
 
 ## 3. Ma trận môi trường
+
+Home/Setup được kiểm thử qua route thật: `/`, `/setup`, `/setup/preview`. E2E tự mở server cổng riêng 5197 và không tái sử dụng server đang chạy, tránh trỏ nhầm dự án khác. Kiểm tra CTA, Home không có bộ chọn, điều hướng Back/Forward, preview guard và camera cleanup khi rời Setup.
 
 | Nhóm | Phạm vi kiểm tra |
 | --- | --- |
@@ -37,7 +39,8 @@ Fixture lớn được tạo khi chạy hoặc lưu nơi quản lý phù hợp; 
 ## 5. Kịch bản bắt buộc
 
 1. Chọn/lọc frame, upload nhiều ảnh có một file lỗi, điền ô trống và giữ ảnh dư.
-2. Crop/zoom/xoay/mirror từng ô, đổi thứ tự, đổi frame nhiều/ít ô, không mất ảnh gốc.
+2. Crop/zoom/xoay/mirror từng ô, đổi thứ tự, đổi layout nhiều/ít ô và đổi frame giữ crop, không mất ảnh gốc.
+   Bộ chọn frame và layout phải độc lập; thumbnail frame không chứa ô ảnh, thumbnail layout không chứa trang trí. Kiểm tra nhóm 16–20 và dải cuộn không làm sidebar nở rộng hoặc che điều khiển trên mobile.
 3. Xuất PNG/JPEG đúng kích thước/nền/layer; thiếu ô hoặc asset không được xuất âm thầm.
 4. Camera quyền cho phép/từ chối, thiết bị không có hoặc đang bận, thay camera và track bị ngắt.
 5. Hẹn giờ 0 và 5 giây, N=1 và N=9, khoảng nghỉ, hủy giữa phiên, bấm bắt đầu nhiều lần và callback cũ.
@@ -57,6 +60,6 @@ So sánh renderer bằng fixture cố định, khóa font/kích thước/môi tr
 
 ## 7. CI và điều kiện phát hành
 
-Hiện chạy được `npm run test:checkers` và `npm run check`. Khi khởi tạo ứng dụng, thêm các bước thật: lint/typecheck/CSS/format → unit/integration → build → kiểm tra bundle/catalog/bản dịch → E2E/visual. Chốt công cụ/phiên bản trước khi viết cấu hình CI.
+Hiện chạy `npm run verify` cho lint/typecheck/CSS/format, unit test, test checker, checker nguồn/bản dịch, build và budget bundle; `npm run test:e2e` cho Chromium desktop/mobile giả lập. GitHub Actions đã được cấu hình chạy cả hai; chưa xác minh một lần chạy workflow trên GitHub. Visual diff baseline tự động và thử thiết bị thật vẫn là phần cần bổ sung.
 
 Lỗi mất ảnh, render sai, tự chụp ngoài phiên, lộ dữ liệu hoặc crash luồng chính chặn phát hành. Báo cáo cần build/commit, môi trường, fixture, bước tái hiện, kết quả, lỗi còn mở và ngoại lệ có người phụ trách. Release chỉ ghi hỗ trợ những môi trường đã kiểm chứng; phần chưa đo phải được nêu rõ.

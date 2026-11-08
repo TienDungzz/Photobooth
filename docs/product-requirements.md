@@ -2,6 +2,8 @@
 
 ## 1. Mục tiêu
 
+Home `/` tập trung banner quảng bá và đường dẫn bắt đầu; chọn frame, layout và ảnh cùng ở trang `/setup`. Không đặt bộ chọn vào Home. Studio desktop có bộ chọn bên trái, preview giữa, ảnh/công cụ bên phải và thanh hành động đáy theo ảnh tham chiếu. Chi tiết tại [Home và Setup](home-and-setup.md).
+
 Xây dựng photobooth độc lập để người dùng tạo ảnh kỷ niệm qua một quy trình ngắn: chọn frame → thêm hoặc chụp ảnh → căn chỉnh → tải ảnh.
 
 Điểm trọng tâm là nhiều frame **và nhiều bố cục thực sự khác nhau**, không chỉ thay màu hoặc sticker trên cùng một bố cục. Phong cách hình ảnh không giới hạn vào Vietnamese Women’s Day hoặc một dịp lễ cụ thể.
@@ -19,7 +21,7 @@ Không yêu cầu tài khoản để hoàn thành quy trình cơ bản.
 
 | Nhóm | Yêu cầu |
 | --- | --- |
-| Kho frame | Xem trước, tìm kiếm, lọc, chọn frame; phân biệt bố cục và biến thể trang trí |
+| Kho frame | Xem trước, lọc theo bộ sưu tập, chọn frame; không có tìm kiếm; phân biệt bố cục và biến thể trang trí |
 | Tải ảnh | Chọn một hoặc nhiều ảnh từ thiết bị; kiểm tra file và gán vào ô |
 | Camera | Xin quyền khi mở camera; xem trước; chọn camera hoặc đổi trước/sau khi thiết bị hỗ trợ |
 | Hẹn giờ | Chụp ngay hoặc sau X giây với đếm ngược rõ ràng |
@@ -37,10 +39,10 @@ Ngoài phạm vi ban đầu: đăng nhập, đồng bộ đám mây, thư viện
 ### Phân loại
 
 - **Bố cục:** số ô, vị trí, kích thước, tỷ lệ, khoảng cách, hình dạng ô và kích thước thành phẩm.
-- **Frame:** bố cục kết hợp màu nền, viền, họa tiết, chữ và lớp trang trí.
+- **Frame:** mẫu trang trí gồm nền giấy, viền, hoa lá, ren/ruy băng, họa tiết và chữ; không gắn cố định với bố cục hoặc số ảnh.
 - **Biến thể:** phiên bản màu hoặc trang trí của một frame; không tính thành bố cục mới.
 
-Mục tiêu đề xuất khi phát hành: ít nhất **20 bố cục khác nhau và 60 frame**, phân bổ qua nhiều nhóm. Đây là mục tiêu nội dung cần được thiết kế, duyệt và kiểm tra; không phải số lượng hiện có.
+Frame và layout phải có hai panel chọn riêng như ảnh tham chiếu, với thumbnail, trạng thái chọn và dải card cuộn ngang. Layout có nhóm Tất cả, 2–3, 4–6, 8–12, 16–20 ảnh. Nhiều layout có cùng số ảnh nhưng cách sắp xếp khác nhau. Không tính phép nhân màu/phong cách với số layout thành số frame. Hiện có 62 frame và 93 layout độc lập; tiếp tục mở rộng theo nhu cầu nội dung. Chi tiết tại [frame và layout](frame-layout-selection.md).
 
 | Nhóm | Ví dụ bố cục |
 | --- | --- |
@@ -51,7 +53,7 @@ Mục tiêu đề xuất khi phát hành: ít nhất **20 bố cục khác nhau 
 | Editorial | Ô ảnh lệch vị trí, khoảng trống lớn, vùng chữ |
 | Scrapbook | Ô nghiêng, viền giấy, ảnh chồng lớp có kiểm soát |
 
-Phong cách đề xuất: tối giản, film/vintage, pastel, dễ thương, đen trắng, lễ hội, tình bạn, cặp đôi. Mỗi frame có thumbnail, tên, tags, số ô và tỷ lệ đầu ra. Bộ lọc gồm số ảnh, tỷ lệ, nhóm bố cục và phong cách; có trạng thái không tìm thấy và nút xóa bộ lọc.
+Phong cách đề xuất: tối giản, film/vintage, pastel, dễ thương, đen trắng, lễ hội, tình bạn, cặp đôi. Mỗi frame có thumbnail giấy trang trí và tên; mỗi layout có thumbnail hình học, số ô và tỷ lệ đầu ra. Bộ lọc số ảnh áp dụng cho layout, không lọc hay thay lựa chọn frame. Đã có tìm tên không phân biệt dấu; frame lọc theo bộ sưu tập/tông màu; layout lọc theo số ảnh chính xác, nhóm bố cục và tỷ lệ. Bộ lọc kết hợp, có số kết quả, xóa lọc và trạng thái rỗng; không thay lựa chọn hiện tại.
 
 Frame phải giữ đúng vị trí ô ở mọi kích thước màn hình. Thumbnail cần phản ánh chính xác frame xuất ra. Lớp trang trí không được vô tình che vùng mặt hoặc phần điều khiển.
 
@@ -72,7 +74,7 @@ Chỉ xin quyền camera khi người dùng bấm mở camera. Không yêu cầu
 | Thiết lập | Giá trị đề xuất |
 | --- | --- |
 | Hẹn giờ trước ảnh đầu | 0–10 giây; mặc định 3 giây |
-| Số ảnh mỗi phiên | 1–9 ảnh; mặc định bằng số ô trống, tối đa 9 |
+| Số ảnh mỗi lượt chụp | 1–9 ảnh; mặc định 1, không tự lấy số ô trống. Chỉ chụp liên tiếp khi người dùng chọn số tấm lớn hơn 1 |
 | Khoảng nghỉ giữa hai ảnh | 1–10 giây; mặc định 3 giây |
 | Phản chiếu ảnh selfie | Preview phản chiếu; ảnh lưu theo lựa chọn phản chiếu của người dùng |
 
@@ -90,7 +92,7 @@ Chỉ xin quyền camera khi người dùng bấm mở camera. Không yêu cầu
 
 - Mỗi ô lưu riêng vị trí, mức zoom và góc xoay; thao tác không ảnh hưởng ô khác.
 - Mặc định ảnh phủ kín ô, giữ tỷ lệ, không kéo méo. Cho phép khôi phục căn chỉnh ban đầu.
-- Khi đổi frame, giữ khay ảnh và ánh xạ ảnh theo thứ tự. Nếu frame mới ít ô hơn, ảnh dư quay về khay; không xóa ảnh gốc.
+- Đổi frame chỉ đổi trang trí, giữ nguyên layout và mọi crop/assignment. Đổi layout giữ frame/khay ảnh, ánh xạ theo thứ tự, reset crop cho tỷ lệ mới; ảnh dư vẫn ở khay.
 - Chỉ cho xuất khi mọi ô bắt buộc đã có ảnh. Nút xuất phải giải thích ô còn thiếu.
 - Thành phẩm không chứa nút điều khiển, đường căn chỉnh hoặc khung chọn; có đủ nền, ảnh, viền và trang trí theo đúng thứ tự lớp.
 - PNG giữ độ trong suốt nếu frame cho phép. JPEG sử dụng màu nền đã cấu hình.
@@ -111,14 +113,14 @@ Chỉ xin quyền camera khi người dùng bấm mở camera. Không yêu cầu
 
 ## 9. Tiêu chí nghiệm thu
 
-1. Chọn được frame qua ít nhất hai bộ lọc kết hợp; kết quả phản ánh đúng số ô và tỷ lệ.
+1. Chọn mẫu frame và layout độc lập; thumbnail riêng đúng vai trò, chọn frame không đổi số ô/layout và chọn layout không đổi frame.
 2. Thêm nhiều ảnh một lần, căn chỉnh từng ô và xuất đúng bố cục.
 3. Từ chối camera vẫn tải ảnh và xuất được thành phẩm.
 4. Hẹn giờ 0 giây chụp ngay; hẹn giờ 5 giây hiển thị đếm ngược trước khi chụp.
 5. Phiên 4 ảnh tạo đúng 4 ảnh với tiến độ rõ ràng và khoảng nghỉ đúng cấu hình trong điều kiện tab hoạt động bình thường.
 6. Hủy sau tấm thứ hai giữ đúng hai ảnh đã chụp và không phát sinh ảnh thứ ba.
 7. Chụp lại một ô không làm thay đổi ảnh ở ô khác.
-8. Đổi từ frame nhiều ô sang ít ô giữ được các ảnh dư trong khay.
+8. Đổi layout nhiều ô sang ít ô giữ ảnh dư trong khay; đổi frame giữ nguyên toàn bộ crop/assignment.
 9. Ảnh xuất khớp preview về crop, xoay, phản chiếu, mask và lớp trang trí.
 10. Đóng camera khiến track camera dừng; chọn ảnh lỗi hoặc xuất lỗi không làm mất phiên chỉnh sửa.
 11. Kiểm chứng trên Chrome/Edge desktop, Safari iOS và Chrome Android bằng thiết bị thật cho camera và tải ảnh.
@@ -130,7 +132,7 @@ Chỉ xin quyền camera khi người dùng bấm mở camera. Không yêu cầu
 
 1. **Nền tảng:** mô hình frame, renderer chung, khay ảnh, chọn frame, tải ảnh, crop và xuất; dùng 6 frame đại diện để kiểm chứng các kiểu bố cục khó.
 2. **Camera:** quyền truy cập, chọn camera, hẹn giờ, chụp liên tiếp, hủy và chụp lại.
-3. **Kho nội dung:** mở rộng tới mục tiêu 20 bố cục/60 frame, thumbnail, bộ lọc, kiểm tra tính hợp lệ của từng frame.
+3. **Kho nội dung:** mở rộng danh mục frame trang trí và layout độc lập, hỗ trợ nhóm layout tới 20 ảnh; kiểm tra thumbnail và mọi tổ hợp được hỗ trợ.
 4. **Hoàn thiện:** thử trên thiết bị thật, bộ nhớ, khả năng truy cập, lỗi tải xuống và độ khớp preview/export.
 
 Các hạng mục cần chốt khi bắt đầu thiết kế: tên sản phẩm, phong cách thương hiệu, bộ frame cụ thể, tài nguyên có quyền sử dụng và thiết bị mục tiêu tối thiểu. Chưa có tài liệu hoặc mã nguồn Vietnamese Women’s Day trong repository để xác nhận phần có thể tái sử dụng.

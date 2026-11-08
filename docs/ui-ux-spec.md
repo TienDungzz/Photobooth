@@ -2,12 +2,14 @@
 
 ## 1. Phạm vi
 
+Thiết kế hiện tại ưu tiên [Home và Setup](home-and-setup.md): Home quảng bá bằng banner, Setup riêng ba cột theo ảnh tham chiếu. Những mô tả gallery cũ được thay bằng panel chọn nằm trong Setup.
+
 Đặc tả bố trí và tương tác cho phiên bản đầu. [Yêu cầu sản phẩm](product-requirements.md) quy định hành vi; [luồng trải nghiệm](user-flows.md) quy định chuyển bước. Đây là wireframe bằng nội dung, chưa phải thiết kế hình ảnh đã duyệt. Màu thương hiệu, font, logo và bộ icon cần chốt khi thiết kế UI.
 
 ## 2. Khung ứng dụng
 
 - Header gồm tên sản phẩm, vị trí hiện tại và nút thiết lập ngôn ngữ/theme.
-- Tiến trình: Chọn frame → Tạo ảnh → Thành phẩm. Camera là màn hình con của bước Tạo ảnh.
+- Tiến trình: Home → Setup (thiết kế và ảnh cùng một màn hình) → Thành phẩm. Camera là dialog của Setup.
 - Quay lại bước trước giữ ảnh và chỉnh sửa; không reload trang. Rời ứng dụng có dữ liệu chưa xuất dùng cảnh báo trình duyệt khi được hỗ trợ.
 - Thiết lập mở bằng panel/dialog có nhãn; đóng trả focus về nút mở. Thay locale/theme áp dụng ngay theo [localization](localization.md) và [theme](theme.md).
 
@@ -15,20 +17,18 @@
 
 | Màn hình | Desktop | Điện thoại |
 | --- | --- | --- |
-| Gallery | Header → tiêu đề → tìm kiếm/bộ lọc → grid frame → tải thêm nếu cần | Header gọn → tìm kiếm → mở bộ lọc → grid hai cột khi đủ chỗ, một cột trên màn hình hẹp |
-| Editor | Header → vùng preview chính và panel nguồn ảnh/công cụ → khay ảnh → nút xem thành phẩm | Preview → công cụ ô đang chọn → nguồn ảnh/khay → thanh hành động dưới |
+| Home | Banner hai cột, minh họa bản in, điểm nổi bật, hướng dẫn, CTA Setup | Banner xếp dọc, CTA rõ; không có bộ chọn |
+| Setup | Bộ chọn trái, preview giữa, nguồn ảnh/khay/công cụ phải; thanh hành động đáy | Preview → bộ chọn → nguồn ảnh/khay/công cụ; có vùng chừa cho thanh đáy |
 | Camera | Preview cạnh panel cấu hình, tiến độ và thumbnail | Preview trên, cấu hình dưới; khi chụp ưu tiên countdown và nút dừng |
 | Thành phẩm | Preview cạnh định dạng/kích thước, tải về, quay lại chỉnh | Preview → định dạng/kích thước → tải về → quay lại chỉnh |
 
 Ưu tiên nội dung theo không gian thực tế; mốc responsive ban đầu đề xuất 48rem và 75rem, cần kiểm tra trước khi chốt. Không coi tên thiết bị là điều kiện phân bố cục. Thanh cố định phải chừa chỗ nội dung, safe area và bàn phím ảo; không che ô ảnh hoặc nút đang focus.
 
-## 4. Gallery
+## 4. Bộ chọn frame và layout
 
-- Frame card hiển thị thumbnail, tên, số ảnh và tỷ lệ. Tên dài xuống dòng có kiểm soát; tên đầy đủ vẫn truy cập được.
-- Toàn card là hành động chọn frame có tên rõ. Không lồng nút tương tác bên trong một nút khác.
-- Bộ lọc nhiều chiều kết hợp với tìm kiếm; hiển thị số kết quả, bộ lọc đang bật và “Xóa bộ lọc”.
-- Giữ tìm kiếm, filter và vị trí cuộn khi quay lại đổi frame. Frame đang dùng có trạng thái được chọn thể hiện cả bằng chữ/icon và màu.
-- Thumbnail chờ tải giữ nguyên tỷ lệ; lỗi ảnh có placeholder và tên frame. Catalog lỗi có nút thử lại; không có kết quả có nút xóa bộ lọc.
+Hai panel thu gọn độc lập theo [ảnh tham chiếu và đặc tả](frame-layout-selection.md). Frame card là trang giấy trang trí không có ô; layout card là sơ đồ ô trung tính không có họa tiết frame. Mỗi panel có tên lựa chọn hiện tại và trạng thái được chọn.
+
+Dải card cuộn ngang bên trong panel; layout có nhóm Tất cả, 2–3, 4–6, 8–12, 16–20. Chọn một mục không tự chuyển bước hoặc xóa bộ lọc. Preview kết hợp cập nhật ngay; nguồn ảnh/camera ở cột phải trên cùng trang Setup.
 
 ## 5. Editor và thao tác ảnh
 
@@ -37,7 +37,7 @@
 - Kéo để dịch ảnh trong ô; pinch để zoom trên thiết bị hỗ trợ. Luôn có slider/nút thay thế cho thao tác gesture, và điều khiển bàn phím khi focus ở công cụ.
 - Đổi thứ tự bằng chọn ảnh từ khay rồi gán ô hoặc hành động đổi vị trí có nhãn; kéo thả là tiện ích bổ sung, không phải cách duy nhất.
 - Khay thể hiện ảnh đã dùng/chưa dùng. Xóa ảnh đang dùng phải nói rõ ảnh hưởng tới các ô liên quan và cho hủy trước khi xóa.
-- Khi đổi frame, giữ ảnh theo luồng sản phẩm; báo ô thiếu/ảnh dư. Crop về cover mặc định cho tỷ lệ mới, không làm người dùng tưởng crop cũ còn nguyên.
+- Đổi frame giữ nguyên layout/crop; đổi layout giữ frame và ảnh, reset crop theo tỷ lệ mới và báo ô thiếu/ảnh dư.
 - Thiếu ô bắt buộc: vẫn giữ nút xem thành phẩm trong bố cục, hiển thị lý do chưa thể tiếp tục và hành động tới ô trống đầu tiên.
 
 ## 6. Camera

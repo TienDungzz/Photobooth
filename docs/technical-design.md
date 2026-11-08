@@ -1,5 +1,11 @@
 # Thiết kế kỹ thuật đề xuất
 
+Đợt occasion bổ sung mask `scallop`, treatment `ticket` và module `occasion-catalog.ts`. Path viền lượn dùng chung clip/outline; cuống vé thuộc layout và chừa không gian ngoài ô ảnh. Viền trang trí theo frame được dựng sau ảnh, trước outline chọn. Xem [hợp đồng occasion](occasion-designs.md).
+
+Triển khai artwork hiện tại dùng `Frame.artwork` (theme, atlas tùy chọn, title/subtitle), mask `rect | rounded | ellipse | heart | star | arch | stamp | blob | cutout | torn | apple` và treatment `browser | polaroid`; nguồn chuẩn là `src/domain/types.ts`. `src/engine/slot-path.ts` dựng đường mask dùng chung cho clip/viền; `src/engine/slot-treatment.ts` dựng giấy/cửa sổ, `src/engine/artwork.ts` tải atlas, chờ font và dựng các lớp. Export chờ atlas đầy đủ và tính riêng hai cạnh để giữ chính xác cạnh dài 1200/2400 px. Xem [thiết kế phá cách](expressive-designs.md) và [pipeline artwork](artwork-provenance.md).
+
+Ứng dụng đã được triển khai bằng React/TypeScript/Vite. Các kiểu dữ liệu dưới đây là thiết kế mở rộng; schema runtime hiện nằm tại src/domain/types.ts. Đối chiếu [trạng thái triển khai](implementation-status.md) trước khi sử dụng ví dụ như hợp đồng đã có trong code.
+
 ## 1. Kiến trúc
 
 Trạng thái và lý do chọn phương án được theo dõi tại [quyết định kiến trúc](architecture-decisions.md); thứ tự xây dựng tại [kế hoạch triển khai](implementation-plan.md). Tạo nội dung theo [hướng dẫn frame](frame-authoring-guide.md), kiểm chứng theo [chiến lược kiểm thử](testing-strategy.md) và phát hành theo [hướng dẫn deploy](deployment-guide.md).
@@ -10,11 +16,11 @@ I18n và theme là hạ tầng giao diện dùng chung, được khởi tạo b�
 
 Mã nguồn tuân theo [quy chuẩn code và BEM](coding-standards.md) cùng [cấu trúc thư mục](folder-structure.md). Tài liệu cấu trúc thư mục quy định vị trí triển khai cụ thể cho các module bên dưới.
 
-Ứng dụng web phía client; phiên bản đầu không cần backend lưu ảnh. Stack chưa được chốt. Có thể dùng TypeScript cùng React/Vite hoặc nền tảng tương đương nếu đáp ứng được renderer và vòng đời camera.
+Ứng dụng web phía client bằng React/TypeScript/Vite; phiên bản đầu không có backend lưu ảnh. Ảnh, preview và export được xử lý cục bộ.
 
 Tách các phần chính:
 
-- `frame-catalog`: metadata, tìm kiếm, lọc và tải tài nguyên frame.
+- `frame-catalog`: hai danh mục frame/layout độc lập, panel chọn, nhóm số ảnh và preview kết hợp.
 - `photo-library`: file tải lên, ảnh chụp, thumbnail và giải phóng tài nguyên.
 - `camera-controller`: quyền camera, video stream, chuyển thiết bị và chụp ảnh.
 - `capture-session`: state machine cho hẹn giờ, chụp liên tiếp, hủy và tiếp tục.
@@ -24,7 +30,9 @@ Tách các phần chính:
 
 Các đường dẫn module là định hướng tổ chức, chưa phải file đã tồn tại.
 
-## 2. Mô hình frame
+## 2. Mô hình frame và layout độc lập
+
+FrameDefinition không giữ layoutId. Phiên làm việc có frameId và layoutId riêng; chỉ renderer nhận Design kết hợp tạm thời. Đổi frame giữ nguyên crop; đổi layout mới cần remap. Xem [yêu cầu đã hiệu chỉnh](frame-layout-selection.md).
 
 Tọa độ của bố cục dùng hệ chuẩn hóa từ 0 đến 1; quy đổi sang pixel theo kích thước bản dựng. Mỗi slot có thể xoay quanh tâm. Thứ tự vẽ phải xác định rõ, đặc biệt với bố cục chồng ảnh.
 
@@ -53,7 +61,6 @@ type LayoutDefinition = {
 type FrameDefinition = {
   id: string;
   version: number;
-  layoutId: string;
   name: string;
   tags: string[];
   category: string;

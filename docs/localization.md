@@ -2,7 +2,7 @@
 
 ## 1. Phạm vi
 
-Thuộc phiên bản đầu, hỗ trợ tiếng Việt (vi) và tiếng Anh (en). Đây là đặc tả; chưa có runtime i18n. Xem riêng [Giao diện sáng/tối](theme.md).
+Thuộc phiên bản đầu, hỗ trợ tiếng Việt (vi) và tiếng Anh (en). Đã triển khai i18next/react-i18next; catalog hiện là locales/vi.json và en.json, chưa tách namespace như cấu trúc mục tiêu dưới đây. Xem riêng [Giao diện sáng/tối](theme.md) và [trạng thái triển khai](implementation-status.md).
 
 ## 2. Chọn và chuyển ngôn ngữ
 
@@ -31,7 +31,7 @@ src/shared/i18n/
         └── frames.json
 ```
 
-`shared/i18n` sở hữu cơ chế i18n và dữ liệu bản dịch; không import component, store hoặc logic từ feature. Feature chỉ dùng API dịch công khai. Đây là phần mở rộng cấu trúc thư mục mục tiêu; chưa tạo các file runtime này. Thư viện i18n sẽ chọn khi chốt stack, cần hỗ trợ interpolation, pluralization, fallback và kiểu key.
+`shared/i18n` sở hữu cơ chế i18n và dữ liệu bản dịch; không import component, store hoặc logic từ feature. Feature dùng react-i18next để truy cập bản dịch. Runtime hiện dùng một file JSON mỗi locale; cấu trúc namespace phía trên là hướng mở rộng, chưa tạo các file namespace rỗng.
 
 Quy chuẩn:
 
@@ -73,6 +73,6 @@ Cơ chế đọc/ghi chung thuộc `shared/lib`; schema thiết lập thuộc `s
 - Đổi ngôn ngữ khi đã crop hoặc đang countdown phải giữ dữ liệu và không tạo thêm timer/phiên chụp.
 - Kiểm tra nhãn, lỗi, trạng thái và tên truy cập trên cả hai ngôn ngữ, cả hai theme, màn hình nhỏ và bàn phím.
 - Kiểm tra câu dài, pluralization, định dạng số và fallback.
-- Khi có catalog, triển khai script/check-i18n.mjs kiểm tra JSON, bộ key và placeholder giữa các locale; thêm vào check-all.mjs. Checker này hiện chưa được triển khai.
+- Đã có script/check-i18n.mjs kiểm tra JSON, bộ key, chuỗi rỗng và placeholder giữa các locale; nằm trong check-all.mjs. Unit test cũng kiểm tra parity.
 - Rà soát chữ hardcode; kiểm tra tĩnh không thay thế đánh giá chất lượng bản dịch.
 - Chữ trong asset frame không tự dịch; cần biến thể nội dung frame riêng nếu muốn hỗ trợ.

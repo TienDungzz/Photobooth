@@ -4,7 +4,7 @@
 
 Chiến lược unit/integration/E2E/thiết bị thật nằm tại [testing strategy](testing-strategy.md). Kiểm tra staging và phát hành theo [deployment guide](deployment-guide.md); checker không thay smoke test trên URL thực tế.
 
-Các checker hỗ trợ thực thi [coding standards](coding-standards.md), [performance standards](performance-standards.md) và [security standards](security-standards.md). Kết quả tĩnh chỉ bao phủ các quy tắc được triển khai; hiện chưa có checker bảo mật, phân tích bundle hoặc đo runtime.
+Các checker hỗ trợ thực thi [coding standards](coding-standards.md), [performance standards](performance-standards.md) và [security standards](security-standards.md). Đã có check-i18n và check-bundle-budget (tổng gzip mọi chunk JS/CSS sau build); chưa có checker bảo mật tổng quát hoặc đo runtime trên thiết bị thật. Bundle checker chạy riêng hoặc qua verify, không nằm trong check-all vì cần dist.
 
 Các file thực thi kiểm tra dự án nằm trong **`script/`**, dùng đuôi **`.mjs`**. Thư viện hỗ trợ đặt tại `script/lib`; không tạo song song thư mục `scripts/`. Bộ hiện tại dùng Node built-in, không cần dependency ngoài. Dùng Node có hỗ trợ ES modules và `node:test`; phiên bản LTS cụ thể sẽ được ghim khi thiết lập môi trường ứng dụng.
 
@@ -15,6 +15,11 @@ npm run check:assets
 npm run check:performance
 npm run check -- --strict
 npm run test:checkers
+npm run check:i18n
+npm run build
+npm run check:bundle
+npm run verify
+npm run test:e2e
 ```
 
 Mỗi checker xuất `error`, `warning` và tổng kết. Có lỗi trả exit code 1; cảnh báo mặc định không chặn. `--strict` biến mọi cảnh báo thành điều kiện thất bại để dùng làm cổng CI. Lỗi đọc file hoặc lỗi thực thi cũng phải thất bại. Không có source/asset sẽ báo `SKIP`, không có nghĩa ứng dụng đã đạt chất lượng.
@@ -82,4 +87,4 @@ Timer hoặc camera là chức năng hợp lệ; cảnh báo chỉ yêu cầu re
 - Lặp mở/đóng camera, thay ảnh và export để tìm tăng bộ nhớ liên tục; xác nhận track, timer và object URL được giải phóng.
 - Kiểm tra gallery dùng thumbnail, không tải tất cả ảnh export ngay khi mở trang.
 
-Sau khi có stack, thêm các checker `.mjs` tương ứng như `check-unused-code.mjs`, `check-frame-catalog.mjs`, `check-bundle-budget.mjs` vào `check-all.mjs`. Đây là phần cần triển khai tiếp cùng ứng dụng, chưa có trong bộ hiện tại. CI nên chạy test checker, kiểm tra tĩnh, lint/typecheck, build rồi kiểm tra artifact/budget; không dùng trạng thái xanh hiện tại để tuyên bố ứng dụng đã tối ưu.
+Đã có check-i18n trong check-all và check-bundle-budget sau build trong verify. check-unused-code và check-frame-catalog độc lập vẫn cần bổ sung; hiện TypeScript bắt unused local/import và unit test kiểm tra catalog/hình học, chưa thay thế phân tích unused export theo dependency graph. CI đã cấu hình verify và E2E; không dùng trạng thái xanh để tuyên bố mọi thiết bị đã đạt hiệu năng.

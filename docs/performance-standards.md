@@ -28,7 +28,7 @@ Tổng tải gallery và các ngưỡng trên cần chốt sau baseline. Thay bu
 
 - Bắt buộc tách metadata/thumbnail khỏi asset độ phân giải cao. Chỉ tải background/overlay bản đầy đủ khi chọn frame hoặc chuẩn bị export.
 - Không import toàn bộ ảnh frame vào bundle JavaScript hay nhúng base64 để tránh request.
-- Gallery tải thumbnail theo vùng hiển thị và vùng đệm nhỏ; không tải đủ 60 frame ngay khi vào trang. Dành sẵn tỷ lệ/kích thước ảnh để hạn chế dịch chuyển bố cục.
+- Gallery tải thumbnail theo vùng hiển thị và vùng đệm nhỏ; không tải toàn bộ tài nguyên trang trí độ phân giải cao khi vào trang. Dành sẵn tỷ lệ/kích thước ảnh để hạn chế dịch chuyển bố cục.
 - Font, icon và thư viện chỉ đưa vào phần thực sự dùng; tránh nhiều bộ icon hoặc thư viện xử lý ảnh trùng chức năng.
 - Trì hoãn module editor/export nặng nếu không cần cho gallery. Quyết định chia chunk dựa trên network trace và bundle analyzer.
 - Cache asset phiên bản hóa; thay nội dung phải thay URL/version. Không cache ảnh người dùng qua service worker.
@@ -66,7 +66,7 @@ Hồi quy vượt budget đã chốt phải được sửa hoặc có ngoại l�
 ## 7. Kiểm tra tự động và nghiệm thu
 
 - Hiện có `script/check-performance.mjs` cho asset lớn, base64 và một số điểm cần review vòng đời; `check-unused-assets.mjs` cho tham chiếu asset và trùng nội dung. Các ngưỡng hiện có không thay thế budget runtime ở trên.
-- Khi có build, bổ sung `script/check-bundle-budget.mjs` để kiểm tra artifact/tải ban đầu và thumbnail theo vai trò; chưa có checker này trong repository.
+- Đã có `script/check-bundle-budget.mjs` kiểm tra tổng gzip JS/CSS của toàn bộ chunk trong dist, gồm cả lazy chunk; chạy sau build qua verify. Chưa đo tổng network gallery, thumbnail theo vai trò hoặc p95 runtime trên thiết bị thật.
 - Khi có ứng dụng và công cụ đo, thêm kịch bản performance có fixture cố định, lưu báo cáo gắn với commit; không chạy phép đo trên dev server để nghiệm thu.
 - CI phải chạy kiểm tra tĩnh, build và budget đã cấu hình. Luồng camera, bộ nhớ và export vẫn cần kiểm chứng thiết bị thật trước phát hành.
 

@@ -57,7 +57,7 @@ Nếu thêm upload máy chủ, chia sẻ công khai, đăng nhập hoặc thanh 
 - Cấu hình X-Content-Type-Options, Referrer-Policy và HSTS phù hợp môi trường. Chỉ bật HSTS bao gồm subdomain khi chắc toàn bộ phạm vi đó hỗ trợ HTTPS.
 - Không công khai source map nếu chứa mã hoặc thông tin nội bộ không muốn phát hành; nếu dùng error tracker, tải source map riêng theo cấu hình được quản lý.
 
-Giá trị header cụ thể được chốt và kiểm thử khi chọn hosting/stack. Hiện chưa có cấu hình deploy hoặc checker header; không xem mục này là đã triển khai.
+Đã có mẫu public/_headers với CSP, referrer, MIME, framing và permission policy cho hosting tương thích. Vite dev/preview không tự áp dụng mẫu; chưa deploy/kiểm tra response hosting hoặc có checker header. CSP style-src cho phép inline style cần cho hình học slot React; script-src vẫn chỉ self. Cần chốt và kiểm thử policy tại staging, không xem file mẫu là bằng chứng production đã được bảo vệ.
 
 ## 7. Dependency, secret và build
 

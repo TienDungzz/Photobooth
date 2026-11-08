@@ -1,8 +1,10 @@
 # Cấu trúc thư mục
 
+Phần artwork đang triển khai: `artwork-source/` giữ PNG nguồn không xuất bản; `public/artwork/` giữ atlas WebP và thumbnail; `script/prepare-artwork.mjs` tái tạo tài nguyên; `src/features/frame-catalog/art-frames.ts` khai báo bộ thiết kế/layout; `src/engine/artwork.ts` tải và dựng các lớp; `src/engine/slot-path.ts` giữ hình học mask dùng chung. Xem [nguồn artwork](artwork-provenance.md).
+
 ## 1. Cây thư mục mục tiêu
 
-Đây là cấu trúc áp dụng khi khởi tạo ứng dụng TypeScript theo hướng React. Repository hiện có README, docs, `package.json` và bộ checker trong `script/`; phần ứng dụng bên dưới là cấu trúc mục tiêu. Chỉ tạo thư mục khi có nội dung sử dụng thực tế.
+Ứng dụng React/TypeScript đã được khởi tạo. Cây bên dưới là cấu trúc mục tiêu để mở rộng; không phải mọi file mẫu đều tồn tại. Catalog hiện tập trung trong `features/frame-catalog/catalog.ts`, locale trong `shared/i18n/locales/{vi,en}.json`; có thêm feature `frame-preview` cho Canvas dùng chung. Xem [trạng thái triển khai](implementation-status.md) để đối chiếu phần đã có. Chỉ tạo thư mục khi có nội dung sử dụng thực tế.
 
 ```text
 Photobooth/
@@ -19,10 +21,14 @@ Photobooth/
 │   ├── theme.md
 │   ├── ui-ux-spec.md
 │   ├── frame-authoring-guide.md
+│   ├── frame-layout-selection.md
+│   ├── catalog-browsing.md
+│   ├── home-and-setup.md
 │   ├── implementation-plan.md
 │   ├── architecture-decisions.md
 │   ├── testing-strategy.md
-│   └── deployment-guide.md
+│   ├── deployment-guide.md
+│   └── implementation-status.md
 ├── public/
 │   └── frames/
 │       └── pastel-strip-01/
@@ -34,6 +40,8 @@ Photobooth/
 │   ├── check-code.mjs
 │   ├── check-unused-assets.mjs
 │   ├── check-performance.mjs
+│   ├── check-i18n.mjs
+│   ├── check-bundle-budget.mjs
 │   ├── check.config.mjs
 │   ├── lib/
 │   │   └── project.mjs
@@ -44,9 +52,10 @@ Photobooth/
 │   ├── app/
 │   │   ├── App.tsx
 │   │   ├── pages/
-│   │   │   └── PhotoboothPage/
-│   │   │       ├── PhotoboothPage.tsx
-│   │   │       └── PhotoboothPage.css
+│   │   │   ├── Home.tsx
+│   │   │   ├── Home.css
+│   │   │   └── HomeHero.css
+│   │   ├── usePage.ts
 │   │   ├── providers/
 │   │   └── model/
 │   │       └── photobooth-session.ts

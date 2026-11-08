@@ -2,7 +2,7 @@
 
 ## 1. Trạng thái và nguyên tắc
 
-Hiện có tài liệu và checker Node trong `script/`; chưa có ứng dụng, catalog, runtime i18n/theme hay cấu hình deploy. Các giai đoạn dưới đây là kế hoạch, chưa đánh dấu hoàn thành. Không ước lượng ngày phát hành trước khi chốt nguồn lực, stack và thiết bị hỗ trợ.
+Đã có ứng dụng, catalog 42 mẫu frame và 70 layout độc lập, locale/theme và toolchain; [trạng thái triển khai](implementation-status.md) liệt kê phần đã có và giới hạn. Các giai đoạn dưới đây vẫn dùng làm cổng nghiệm thu: chưa đánh dấu hoàn thành toàn bộ vì còn kiểm chứng thiết bị thật, hosting và performance baseline. Không suy ra ngày phát hành từ việc build/E2E đạt.
 
 [Yêu cầu sản phẩm](product-requirements.md) là nguồn phạm vi; tiêu chuẩn code/hiệu năng/bảo mật là điều kiện xuyên suốt. Các mốc dưới đây chi tiết hóa thứ tự triển khai đã có trong yêu cầu sản phẩm.
 
@@ -17,7 +17,7 @@ Hiện có tài liệu và checker Node trong `script/`; chưa có ứng dụng,
 | M4 — Mở rộng nội dung | Catalog theo mục tiêu sản phẩm, filter/search, thumbnail, tài liệu nguồn asset, validator catalog | M2; M3 trước nghiệm thu toàn bộ | Mỗi frame qua QA; đủ layout khác nhau, không đếm biến thể màu; không tải toàn bộ asset lớn lúc vào gallery |
 | M5 — Ổn định và phát hành | Baseline/budget, kiểm thử thiết bị, bảo mật, staging, header/cache và rollback | M3, M4 | Đạt các cổng phát hành; lưu báo cáo và giới hạn còn lại |
 
-Sáu frame thử ở M2 cần bao phủ: một ảnh, strip, grid, bất đối xứng, ô xoay/chồng lớp và alpha/mask. Đây là tập kiểm chứng renderer trước khi sản xuất số lượng lớn.
+Sáu tổ hợp frame/layout thử ở M2 cần bao phủ: một ảnh, strip, grid, bất đối xứng, ô xoay/chồng lớp và alpha/mask. Đây là tập kiểm chứng renderer trước khi sản xuất số lượng lớn; các tổ hợp không được tính thành số frame.
 
 ## 3. Cổng kiểm tra
 
@@ -27,7 +27,7 @@ Sáu frame thử ở M2 cần bao phủ: một ảnh, strip, grid, bất đối 
 - Sau M4: validator catalog, kiểm tra bản dịch và asset; rà soát bản quyền và thumbnail từng frame.
 - Trước phát hành: hoàn thành [testing strategy](testing-strategy.md), [performance standards](performance-standards.md), [security standards](security-standards.md) và smoke test theo [deployment guide](deployment-guide.md).
 
-Checker mới cần thêm theo thời điểm có dữ liệu: check-i18n ở M1, check-frame-catalog ở M2/M4, check-unused-code khi chốt toolchain, check-bundle-budget và các kiểm tra security khả thi trước M5. Những checker này chưa tồn tại ở trạng thái hiện tại.
+Đã triển khai check-i18n và check-bundle-budget. check-frame-catalog độc lập, check-unused-code theo dependency graph và các kiểm tra security khả thi vẫn cần bổ sung trước nghiệm thu đầy đủ; hiện catalog đã có validation trong unit test.
 
 ## 4. Rủi ro và cách giảm
 

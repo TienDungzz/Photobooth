@@ -129,9 +129,9 @@ Block `button` do shared UI sở hữu; CSS của camera không định nghĩa l
 
 ## 8. Công cụ và điều kiện hoàn thành
 
-Khi khởi tạo mã nguồn, cấu hình formatter, ESLint cho TypeScript/framework đã chọn, Stylelint cho CSS/BEM và kiểm tra kiểu. Các công cụ phải chạy cùng cấu hình ở local và CI. Repository đã có checker `.mjs` trong `script/`; chưa có cấu hình ESLint, Stylelint, formatter hay TypeScript. Checker hiện tại không thay thế các công cụ đó.
+Đã có Prettier, ESLint cho TypeScript/React hooks, Stylelint cho CSS/BEM và TypeScript strict. Các công cụ dùng cùng cấu hình ở local và CI; scripts hiện có trong package.json. Checker `.mjs` không thay thế những công cụ đó.
 
-Các lệnh cần cung cấp trong `package.json`: `dev`, `build`, `typecheck`, `lint`, `lint:css`, `format:check`, `test`. Công cụ và phiên bản cụ thể được chốt khi khởi tạo ứng dụng; không xem đây là các lệnh hiện đã chạy được.
+Các lệnh `dev`, `build`, `typecheck`, `lint`, `lint:css`, `format:check`, `test` đã chạy được. `verify` gom các bước kiểm tra và budget bundle; `test:e2e` dùng trình duyệt kiểm thử riêng. Phiên bản công cụ được giữ trong package/lockfile.
 
 Các lệnh `check`, `check:code`, `check:assets`, `check:performance` và `test:checkers` đã chạy được. Xem [cơ chế kiểm tra chất lượng](quality-checks.md) để biết ngưỡng, ngoại lệ, chế độ strict và giới hạn phân tích.
 

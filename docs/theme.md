@@ -2,7 +2,7 @@
 
 ## 1. Phạm vi
 
-Thuộc phiên bản đầu với ba lựa chọn: sáng (light), tối (dark), theo hệ thống (system). Đây là đặc tả; chưa có runtime theme. Xem riêng [Đa ngôn ngữ](localization.md).
+Thuộc phiên bản đầu với ba lựa chọn: sáng (light), tối (dark), theo hệ thống (system). Đã có semantic token, bootstrap trong public/theme-init.js và lưu thiết lập; xem [trạng thái triển khai](implementation-status.md). Xem riêng [Đa ngôn ngữ](localization.md).
 
 ## 2. Lựa chọn và phân giải theme
 
@@ -14,6 +14,8 @@ Thuộc phiên bản đầu với ba lựa chọn: sáng (light), tối (dark), 
 - Không remount editor/camera khi đổi theme. Listener theo dõi theme hệ thống phải được cleanup; không gắn lại nhiều lần.
 
 ## 3. Token và phạm vi màu sắc
+
+Dark mode dùng palette trung tính: nền xám than `#181a1b`, surface `#222526`, chữ `#eceeed`, chữ phụ `#abb2b5`, accent xám lạnh `#bfc7cb`. Viền chọn, nền chọn, scrollbar, tape minh họa UI, bóng đổ và checkerboard preview dùng token riêng để không còn kế thừa màu hồng hardcode. Light mode giữ palette rose. Frame/ảnh xuất giữ nguyên màu theo thiết kế.
 
 Token giao diện đặt tại `src/shared/styles/tokens.css`. Dùng semantic token như `--color-background`, `--color-surface`, `--color-text`, `--color-text-muted`, `--color-border`, `--color-accent`, `--color-focus`, `--color-error`. Mỗi theme cung cấp đủ cùng một bộ token; component vẫn dùng BEM và không hardcode palette riêng.
 
